@@ -1,0 +1,84 @@
+{
+    "configurations": [
+        {
+            "name": "!!! WARNING !!! AUTO-GENERATED FILE, PLEASE DO NOT MODIFY IT AND USE https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags"
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "/home/antisvin/dev/git/FieldKitFX.pio/src",
+                "/home/antisvin/dev/git/FieldKitFX.pio/lib/engine",
+                "/home/antisvin/dev/git/FieldKitFX.pio/lib/UI",
+                "/home/antisvin/dev/git/FieldKitFX.pio/lib/hardware",
+                "/home/antisvin/dev/git/FieldKitFX.pio/lib/dataUtils",
+                "/home/antisvin/dev/git/FieldKitFX.pio/include",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/CMSIS/Include",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/CMSIS/Device/ST/STM32F3xx/Include",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/STM32F3xx_HAL_Driver/Inc",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/Common",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/stts751",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/cs42l52",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/stlm75",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/hx8347d",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/hx8347g",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/cs43l22",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/ili9325",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/l3gd20",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/ili9320",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/ili9328",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/lsm303dlhc",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/spfd5408",
+                "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/st7735",
+                "/home/antisvin/.platformio/packages/tool-unity",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/home/antisvin/dev/git/FieldKitFX.pio/src",
+                    "/home/antisvin/dev/git/FieldKitFX.pio/lib/engine",
+                    "/home/antisvin/dev/git/FieldKitFX.pio/lib/UI",
+                    "/home/antisvin/dev/git/FieldKitFX.pio/lib/hardware",
+                    "/home/antisvin/dev/git/FieldKitFX.pio/lib/dataUtils",
+                    "/home/antisvin/dev/git/FieldKitFX.pio/include",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/CMSIS/Include",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/CMSIS/Device/ST/STM32F3xx/Include",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/STM32F3xx_HAL_Driver/Inc",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/Common",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/stts751",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/cs42l52",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/stlm75",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/hx8347d",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/hx8347g",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/cs43l22",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/ili9325",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/l3gd20",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/ili9320",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/ili9328",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/lsm303dlhc",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/spfd5408",
+                    "/home/antisvin/.platformio/packages/framework-stm32cube/f3/Drivers/BSP/Components/st7735",
+                    "/home/antisvin/.platformio/packages/tool-unity",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=40201",
+                "STM32F3",
+                "STM32F303xC",
+                "USE_LEGACY",
+                "USE_HAL_DRIVER",
+                "F_CPU=72000000L",
+                ""
+            ],
+            "intelliSenseMode": "clang-x64",
+            "compilerPath": "/home/antisvin/.platformio/packages/toolchain-gccarmnoneeabi/bin/arm-none-eabi-gcc",
+            "compilerArgs": [
+                "-mthumb",
+                "-mcpu=cortex-m4",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}
