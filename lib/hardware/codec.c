@@ -280,7 +280,7 @@ void codec_ConfigCodec_48K() {
 
 	// Configure L&R inputs
 	codec_writeRegister(CODEC_REG_LEFT_LINE_IN, CODEC_INPUT_0_DB);
-	codec_writeRegister(CODEC_REG_RIGHT_LINE_IN, CODEC_INPUT_0_DB);	//mute the right input channel
+	codec_writeRegister(CODEC_REG_RIGHT_LINE_IN, CODEC_INPUT_MUTE);	//mute the right input channel
 
 	// Configure L&R headphone outputs
 	codec_writeRegister(CODEC_REG_LEFT_HEADPHONES_OUT, CODEC_HEADPHONES_MUTE);
