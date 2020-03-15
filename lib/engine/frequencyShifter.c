@@ -11,7 +11,6 @@
 #include "freqCVLUT.h"
 #include "randomUtils.h"
 
-
 /*
  * Global definitions of the frequency shifter's components
  */
@@ -24,7 +23,7 @@ movingAverageFilterINT_t maf2;
 uint32_t shiftAmountMAFilterMem[FSMAFILTER_LEN];
 uint32_t sidebandControlMAFilterMem[FSMAFILTER_LEN];
 
-void frequencyShifter_init(frequencyShifter_t* freqShifter) {
+void frequencyShifter_init(frequencyShifter_t *freqShifter) {
 	//populate the structure
 	freqShifter->localOscillator = &osc_;
 	freqShifter->transformer = &hTrans_;
@@ -48,26 +47,20 @@ void frequencyShifter_init(frequencyShifter_t* freqShifter) {
 	frequencyShifter_setShiftAmt(freqShifter, 0);
 }
 
-
-void frequencyShifter_setShiftAmt(frequencyShifter_t* freqShifter, float freq) {
+void frequencyShifter_setShiftAmt(frequencyShifter_t *freqShifter, float freq) {
 	quadratureOscillator_setFreq(freqShifter->localOscillator, freq);
 }
 
-
-void frequencyShifter_setSideBandXfade(frequencyShifter_t* freqShifter, float sidebandCoeff) {
+void frequencyShifter_setSideBandXfade(frequencyShifter_t *freqShifter, float sidebandCoeff) {
 	freqShifter->xfader->lambda = sidebandCoeff;
 }
 
-
-void frequencyShifter_setFbkAmt(frequencyShifter_t* freqShifter, float fbkAmt_) {
+void frequencyShifter_setFbkAmt(frequencyShifter_t *freqShifter, float fbkAmt_) {
 	freqShifter->fbkAmt = fbkAmt_;
 }
 
-
-void frequencyShifter_processSample(frequencyShifter_t* freqShifter, int16_t* sample) {
-	float sample_I, sample_Q, sample_USB, sample_LSB;
-	//convert the incoming sample to float
-	sample_I = (float)(*sample)/32768.0;	//from [-32768, 32767] to [-1.0, 1.0]
+void frequencyShifter_processSample(frequencyShifter_t *freqShifter, float *sample) {
+	float sample_I = *sample;
 	//remove DC component
 	DC_remover_process(freqShifter->DCFilter, sample_I);
 	//process the sample thru the hilbert transformer
@@ -77,25 +70,21 @@ void frequencyShifter_processSample(frequencyShifter_t* freqShifter, int16_t* sa
 
 	//compute the USB and LSB samples
 	sample_I = freqShifter->localOscillator->sineOut * freqShifter->transformer->outputSample_1;
-	sample_Q = freqShifter->localOscillator->cosineOut * freqShifter->transformer->outputSample_2;
+	float sample_Q = freqShifter->localOscillator->cosineOut * freqShifter->transformer->outputSample_2;
 
-	sample_USB = sample_I - sample_Q;
-	sample_LSB = sample_I + sample_Q;
+	float sample_USB = sample_I - sample_Q;
+	float sample_LSB = sample_I + sample_Q;
 
-	//crossfade the two sideband signals and scale the output sample back to int16_t
-	sample_I = freqShifter->xfader->lambda*sample_USB + (1.0-freqShifter->xfader->lambda)*sample_LSB;
+	//crossfade the two sideband signals
+	sample_I = freqShifter->xfader->lambda * sample_USB + (1.0 - freqShifter->xfader->lambda) * sample_LSB;
 
-	if(sample_I > 1.0)
-		sample_I = 1.0;
-	else if(sample_I < -1.0)
-		sample_I = -1.0;
-
-	*sample = sample_I*32767;
+	*sample = clip(sample_I);
 }
 
-void frequencyShifter_updateCVs(frequencyShifter_t* freqShifter) {
+void frequencyShifter_updateCVs(frequencyShifter_t *freqShifter)
+{
 	//scale the CV values and update the CV filters
-	volatile uint32_t temp_amount = ADC_getMixedCV2() &(0xff0);
+	volatile uint32_t temp_amount = ADC_getMixedCV2() & (0xff0);
 
 	/*
 	 * WITH CV FILTERING
@@ -107,5 +96,5 @@ void frequencyShifter_updateCVs(frequencyShifter_t* freqShifter) {
 
 	//then make the actual changes
 	frequencyShifter_setShiftAmt(freqShifter, freqCVLUT[ADC_RESOLUTION_DEZ - freqShifter->shiftAmountMAFilter->output]);
-	frequencyShifter_setSideBandXfade(freqShifter, (float)(freqShifter->sidebandControlMAFilter->output)/(float)(ADC_RESOLUTION_DEZ));
+	frequencyShifter_setSideBandXfade(freqShifter, (float)(freqShifter->sidebandControlMAFilter->output) / (float)(ADC_RESOLUTION_DEZ));
 }

@@ -29,7 +29,7 @@ typedef struct {
 } frame_t;
 
 
-void encodeFrame(int16_t* rawStream, frame_t* frame);
-void decodeFrame(frame_t* frame, int16_t* decodedStream);
+void encodeFrame(float* rawStream, frame_t* frame);
+void decodeFrame(frame_t* frame, float* decodedStream);
 
 #endif /* FRAME_H_ */

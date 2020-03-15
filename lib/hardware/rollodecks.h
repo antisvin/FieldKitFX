@@ -15,11 +15,11 @@
 #define ROLLOMUX_CLKENABLE	__HAL_RCC_GPIOB_CLK_ENABLE
 
 typedef enum {
-	SETMUX1 = 0,	//only set the MUXs and start ADC
+	SETMUX1,	//only set the MUXs and start ADC
+	SETMUXREAD1,	//read ADC, set MUXs and start new conversion
 	SETMUXREAD2,	//read ADC, set MUXs and start new conversion
 	SETMUXREAD3,	//read ADC, set MUXs and start new conversion
-	SETMUXREAD4,	//read ADC, set MUXs and start new conversion
-	READ5			//only read the ADC
+	SETMUXREAD4 	//read ADC, set MUXs and start new conversion
 } rollodecks_subState_t;
 
 

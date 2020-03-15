@@ -15,17 +15,46 @@
 /*
  * clips a float to [-1.0,1.0]
  */
-float clip(float input);
+inline float clip(float input) {
+	if(input > 1.0f)
+		return 1.0f;
+	else if(input < -1.0f)
+		return -1.0f;
+	else
+		return input;
+}
 
 /*
  * scales an unsigned 12bit signal to a float [-1.0,1.0]
  */
-float scale_uint12_to_float(uint16_t input);
+inline float scale_uint12_to_float(uint16_t input){
+    return clip(((float) input ) / 2047.0f - 1.0f);
+}
 
 /*
  * scales a float [-1.0,1.0] to a unsigned 12bit signal
  */
+inline uint16_t scale_float_to_uint12(float input){
+    //return (uint16_t)((clip(input) + 1.0) * 2047U);
+	return 2047U + (int16_t)(clip(input) * 2047.0);
+}
 
-uint16_t scale_float_to_uint12(float input);
+/*
+ * scales an signed 16bit signal to a float [-1.0,1.0]
+ */
+inline float scale_int16_to_float(int16_t input){
+	return (float)input / 32767.0;
+}
 
+/*
+ * scales a float [-1.0,1.0] to a signed 16bit signal
+ */
+inline int16_t scale_float_to_int16(float input){
+	return (int16_t)(input * 32767.0);
+}
+
+/* crossfades two values, fade parameter must be in [0.0, 1.0] range */
+inline float crossfade(float a, float b, float fade) {
+    return a * fade + b * (1 - fade);
+}
 #endif /* RANDOMUTILS_H_ */

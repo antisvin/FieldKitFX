@@ -7,9 +7,11 @@
 #include "codec.h"
 #include "debug.h"
 #include "stm32f3xx_it.h"
+#include "randomUtils.h"
 
-int16_t audio_input_buffer[AUDIO_IO_BUFFER_SIZE];
-int16_t audio_output_buffer[AUDIO_IO_BUFFER_SIZE];
+
+static int16_t audio_input_buffer[AUDIO_IO_BUFFER_SIZE];
+static int16_t audio_output_buffer[AUDIO_IO_BUFFER_SIZE];
 
 void codec_ConfigGPIO(void) {
 	CODEC_GPIO_CLK_ENABLE();
@@ -190,10 +192,8 @@ void i2s_Xfr_halfCplt_RX(DMA_HandleTypeDef * hdma) {
 	 * The DMA controller is now filling the second half of the DMA buffer, we can safely read the contents of the first half
 	 * and push them in the audio_in_ringbuffer
 	 */
-	uint8_t i;
-
-	for(i=0; i<AUDIO_IO_BUFFER_SIZE/4; i++) {
-		user_audio_in_buffer.buffer[i] = audio_input_buffer[2*i];
+	for(uint8_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
+		user_audio_in_buffer.buffer[i] = scale_int16_to_float(audio_input_buffer[2 * i]);
 		//ditch the RIGHT channel
 	}
 	audio_in_buffer_reset(&user_audio_in_buffer);
@@ -204,11 +204,8 @@ void i2s_Xfr_cplt_RX(DMA_HandleTypeDef * hdma) {
 	 * The DMA controller is now filling the first half of the DMA buffer, we can safely read the contents of the second half
 	 * and push them in the user in buffer
 	 */
-
-	uint8_t i;
-
-	for(i=0; i<AUDIO_IO_BUFFER_SIZE/4; i++) {
-		user_audio_in_buffer.buffer[i] = audio_input_buffer[(AUDIO_IO_BUFFER_SIZE/2) + 2*i];
+	for(uint8_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
+		user_audio_in_buffer.buffer[i] = scale_int16_to_float(audio_input_buffer[USER_AUDIO_IO_BUFFER_SIZE * 2 + 2 * i]);
 		//ditch the RIGHT channel
 	}
 	audio_in_buffer_reset(&user_audio_in_buffer);
@@ -219,15 +216,13 @@ void i2s_Xfr_halfCplt_TX(DMA_HandleTypeDef * hdma) {
 	 * The DMA controller is now reading the second half of the DMA buffer, we can transfer the contents of the user buffer
 	 * to the first half of the DMA buffer
 	 */
-	uint8_t i;
-
 	// check for sample drops
 	if(!audio_out_buffer_isFull(&user_audio_out_buffer)) {
 		sampleDropCallback();
 	}
-	for(i=0; i<AUDIO_IO_BUFFER_SIZE/4; i++) {
-		audio_output_buffer[2*i] = user_audio_out_buffer.buffer[i];
-		audio_output_buffer[2*i+1] = 0;	//we don't use the RIGHT channel
+	for(uint8_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
+		audio_output_buffer[2 * i] = scale_float_to_int16(user_audio_out_buffer.buffer[i]);
+		//audio_output_buffer[2*i+1] = 0;	//we don't use the RIGHT channel
 	}
 	audio_out_buffer_reset(&user_audio_out_buffer);
 }
@@ -237,20 +232,16 @@ void i2s_Xfr_cplt_TX(DMA_HandleTypeDef * hdma) {
 	 * The DMA controller is now reading the first half of the DMA buffer, we can transfer the contents of the user buffer
 	 * to the second half of the DMA buffer
 	 */
-	uint8_t i;
-
 	// check for sample drops
 	if(!audio_out_buffer_isFull(&user_audio_out_buffer)) {
 		sampleDropCallback();
 	}
-	for(i=0; i<AUDIO_IO_BUFFER_SIZE/4; i++) {
-		audio_output_buffer[(AUDIO_IO_BUFFER_SIZE/2) + 2*i] = user_audio_out_buffer.buffer[i];
-		audio_output_buffer[(AUDIO_IO_BUFFER_SIZE/2) + (2*i+1)] = 0;	//we don't use the RIGHT channel
+	for(uint8_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
+		audio_output_buffer[USER_AUDIO_IO_BUFFER_SIZE * 2 + 2 * i] = scale_float_to_int16(user_audio_out_buffer.buffer[i]);
+		//audio_output_buffer[(AUDIO_IO_BUFFER_SIZE/2) + (2*i+1)] = 0;	//we don't use the RIGHT channel
 	}
 	audio_out_buffer_reset(&user_audio_out_buffer);
 }
-
-
 
 void codec_writeRegister(uint8_t regAddr, uint16_t data) {
 	uint8_t temp[2];

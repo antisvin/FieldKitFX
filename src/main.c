@@ -74,7 +74,7 @@ int main(void)
 	/*
 	 * sample to process
 	 */
-	int16_t sample;
+	float sample;
 
 
 	/*============================================================================================================*/
@@ -168,7 +168,7 @@ int main(void)
 			}
 			else {
 				UI_render();
-			}
+			} 
 		}else{//in calibration mode
 			if(FXSelector_justSwitchedTo(CALIBRATION)){
 				UI_initCalibration();

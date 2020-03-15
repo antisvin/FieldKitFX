@@ -120,8 +120,8 @@ DMA_HandleTypeDef hdma_i2s_rx;
 DMA_HandleTypeDef hdma_i2s_tx;
 I2S_HandleTypeDef I2SHandle;
 I2S_HandleTypeDef I2S_extHandle;
-uint16_t DMA_TX_buffer[AUDIO_IO_BUFFER_SIZE];
-uint16_t DMA_RX_buffer[AUDIO_IO_BUFFER_SIZE];
+//uint16_t DMA_TX_buffer[AUDIO_IO_BUFFER_SIZE];
+//uint16_t DMA_RX_buffer[AUDIO_IO_BUFFER_SIZE];
 
 
 

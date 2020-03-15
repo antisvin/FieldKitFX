@@ -16,7 +16,7 @@
 //this defines the time (in samples) that a maximum value is hold
 #define MAX_HOLD_TIME 24000
 
-void magnitudeTracker_processSample(int16_t sample);
-uint16_t magnitudeTracker_getMax(void);
+void magnitudeTracker_processSample(float sample);
+float magnitudeTracker_getMax(void);
 
 #endif /* MAGNITUDETRACKER_H_ */

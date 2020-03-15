@@ -16,6 +16,12 @@ The code in this repository is licensed under the GNU General Public License v3.
 Release history
 ===============
 
+0.1.0
+-----
+
+* Rewritten all audio processing code to use floating point values
+* Increased MCU frequency
+
 0.0.1
 -----
 

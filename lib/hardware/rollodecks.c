@@ -42,23 +42,27 @@ void rollodecks_update(void) {
 	switch(rollodecks_subState) {
 	case SETMUX1:
 		rolloMUX_set(0);
-		//start conversion
+		rollodecks_subState = SETMUXREAD2;
+		break;
+	case SETMUXREAD1:
+		rolloCV_values[3] = ADC_getRolloCV();
+		rolloMUX_set(0);
+		rollodecks_subState = SETMUXREAD2;
 		break;
 	case SETMUXREAD2:
 		rolloCV_values[0] = ADC_getRolloCV();
 		rolloMUX_set(1);
+		rollodecks_subState = SETMUXREAD3;
 		break;
 	case SETMUXREAD3:
 		rolloCV_values[1] = ADC_getRolloCV();
 		rolloMUX_set(2);
+		rollodecks_subState = SETMUXREAD4;
 		break;
 	case SETMUXREAD4:
 		rolloCV_values[2] = ADC_getRolloCV();
 		rolloMUX_set(3);
-		break;
-	case READ5:
-		rolloCV_values[3] = ADC_getRolloCV();
+		rollodecks_subState = SETMUXREAD1;
 		break;
 	}
-	rollodecks_subState = (++rollodecks_subState)%5;	//to loop back to the first substate
 }

@@ -60,7 +60,7 @@ looper_t looper;
 
 void looper_init(looper_t* l);
 void looper_process(looper_t * l);
-void looper_process_bitcrush(int16_t* inputBuffer, int16_t* outputBuffer, uint16_t ADCValue);
-void looper_process_sampleRateReducer(int16_t* inputBuffer, int16_t* outputBuffer, uint16_t ADCValue);
+void looper_process_bitcrush(float* inputBuffer, float* outputBuffer, uint16_t ADCValue);
+void looper_process_sampleRateReducer(float* inputBuffer, float* outputBuffer, uint16_t ADCValue);
 
 #endif /* LOOPER_H_ */

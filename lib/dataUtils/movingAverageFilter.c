@@ -41,8 +41,6 @@ void movingAverageFilterINT_init(movingAverageFilterINT_t *filter, uint32_t *arr
 }
 
 void movingAverageFilterINT_process(movingAverageFilterINT_t *filter, uint32_t inputSample) {
-
-
   //shift the line
   for(int i=filter->length-1; i>0; i--)
     (filter->line)[i] = (filter->line)[i-1];

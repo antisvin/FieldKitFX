@@ -6,31 +6,23 @@
 #include "magnitudeTracker.h"
 
 uint16_t trackTime = 0;
-uint16_t trackMax = 0;
+float trackMax = 0.0f;
 
-void magnitudeTracker_processSample(int16_t sample){
-	uint16_t shiftedSample;
-	//convert the sample from signed to unsigned
-	if(sample & (1 << 15)){
-		shiftedSample = ~(sample);
-	}else{
-		shiftedSample = sample;
-	}
+void magnitudeTracker_processSample(float sample){
 	//check wether we got a new maximum, otherwise increase the hold counter
-	if(shiftedSample > trackMax){
+	if(sample > trackMax){
 		trackTime = 0;
-		trackMax = shiftedSample;
+		trackMax = sample;
 	}else{
 		trackTime++;
 	}
 	//check if the hold time elapsed
 	if(trackTime > MAX_HOLD_TIME){
 		trackTime = 0;
-		trackMax = shiftedSample;
+		trackMax = sample;
 	}
-
 }
 
-uint16_t magnitudeTracker_getMax(void){
+inline float magnitudeTracker_getMax(void){
 	return trackMax;
 }

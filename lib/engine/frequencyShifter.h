@@ -46,7 +46,7 @@ void frequencyShifter_init(frequencyShifter_t* freqShifter);
 void frequencyShifter_setShiftAmt(frequencyShifter_t* freqShifter, float freq);
 void frequencyShifter_setSideBandXfade(frequencyShifter_t* freqShifter, float sidebandCoeff); //coeff € [0, 1] -> [LSB, DSB, USB]
 void frequencyShifter_setFbkAmt(frequencyShifter_t* freqShifter, float fbkAmt_);
-void frequencyShifter_processSample(frequencyShifter_t* freqShifter, int16_t* sample);
+void frequencyShifter_processSample(frequencyShifter_t* freqShifter, float* sample);
 void frequencyShifter_updateCVs(frequencyShifter_t* freqShifter);
 
 #endif /* FREQUENCYSHIFTER_H_ */

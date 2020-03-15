@@ -33,7 +33,7 @@ void hilbertTransformer_init(HilbertTransformer_t* ht) {
 
 	ht->coefficients = coefficients;
 
-	for(i=0; i<NUM_ALLPASS; i++) {
+	for(uint8_t i=0; i<NUM_ALLPASS; i++) {
 		(ht->oldx)[i] = 0.0;
 		(ht->oldy)[i] = 0.0;
 	}
