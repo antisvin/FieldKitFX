@@ -12,19 +12,18 @@
  *
  * after the execution of that function, the MCU runs at 72MHz
  */
-
-/*
-* Initializes the internal high speed crystal (HSI, 8MHz) and make the whole processor run at 64MHz
-*
-* Sysclk : 64MHz
-* APB1 Periph clk : 32MHz
-* APB1 Timer clk : 64MHz
-* APB2 Periph/Timer clk : 64MHz
-*
-*/
-//void systemClock_Config_HSI(void);
 void systemClock_Config_HSE(void);
 
+/*
+ * Initializes the internal high speed crystal (HSI, 8MHz) and make the whole processor run at 64MHz
+ *
+ * Sysclk : 64MHz
+ * APB1 Periph clk : 32MHz
+ * APB1 Timer clk : 64MHz
+ * APB2 Periph/Timer clk : 64MHz
+ *
+ */
+// void systemClock_Config_HSI(void);
 
 /*
  * small utils
