@@ -18,6 +18,14 @@ The code in this repository is licensed under the GNU General Public License v3.
 Release history
 ===============
 
+0.3.0
+-----
+
+* DSP effects are independent from looper and can be switch
+* "Shift" menu will be used for settings, currenly you can switch effect type here with loop button or disable effect processing
+* DSP effect is applied on signal before looper, which means that it would be recored by looper. Second effect slot would be added for wet looper signal later.
+* Looper will always run and won't be reset by toggling the other menu
+
 0.2.0
 -----
 

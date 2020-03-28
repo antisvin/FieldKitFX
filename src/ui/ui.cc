@@ -3,6 +3,7 @@
  *
  */
 
+#include "engine/effects.h"
 #include "ui/ui.h"
 
 namespace fieldkitfx {
@@ -80,102 +81,26 @@ void UI::render() {
         break;
     case UI_loopButton_update:
         loopButton.updateStates();
-        if (fxSelector.getSelectedFx() == FX_LOOPER) {
-            switch (looper.state) {
-            case ARMED:
-                looper.previousState = ARMED;
-                if (loopButton.checkRisingEdge()) {
-                    looper.flag = 0;
-                    looper.framePointer = 0;
-                    looper.state = RECORD;
-                    looper.previousState = ARMED;
-                    loopButton.setColor(LOOPLED_RECORD);
-                    loopButton.setIntensity(LOOPLED_HIGH_INTENSITY);
-                }
-                break;
-
-            case RECORD:
-                looper.previousState = RECORD;
-                if (loopButton.checkFallingEdge() ||
-                    looper.framePointer >= MAX_FRAME_NUM) {
-                    looper.state = PLAYBACK;
-                    looper.previousState = RECORD;
-                    looper.endFramePosition = looper.framePointer - 1;
-                    looper.framePointer = 0;
-                    looper.doFadeOut = FRAME_NUMBER_FADE_IN;
-                    loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
-                    loopButton.setColor(LOOPLED_PLAYBACK);
-                }
-                break;
-
-            case PLAYBACK:
-                looper.previousState = PLAYBACK;
-                if (loopButton.isLow()) {
-                    looper.flag = 1;
-                }
-                if (looper.endFramePosition >=
-                    BLINK_FRAME_THRESHOLD + BLINK_GUARD_INTERVAL) {
-                    if (looper.framePointer >=
-                        looper.endFramePosition - BLINK_FRAME_THRESHOLD) {
-                        loopButton.setIntensity(0);
-                    }
-                    else if (looper.framePointer == 0) {
-                        loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
-                    }
-                }
-                if (loopButton.checkRisingEdge()) {
-                    looper.state = OVERDUB;
-                    looper.previousState = PLAYBACK;
-                    looper.doOverdubFadeIn = FRAME_NUMBER_FADE_IN;
-                    loopButton.setColor(LOOPLED_OVERDUB);
-                    loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
-                }
-                break;
-
-            case OVERDUB:
-                looper.previousState = OVERDUB;
-                if (loopButton.checkFallingEdge()) {
-                    if (loopButton.wasShortPress()) {
-                        looper.state = ERASE;
-                        looper.previousState = OVERDUB;
-                        loopButton.setColor(LOOPLED_ERASE);
-                        loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
-                    }
-                    else {
-                        looper.state =
-                            OVERDUB; // the looper switches to playback after the fadeout
-                        looper.doOverdubFadeOut = FRAME_NUMBER_FADE_IN;
-                        looper.previousState = OVERDUB;
-                        loopButton.setColor(LOOPLED_PLAYBACK);
-                        loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
-                    }
-                }
-                break;
-
-            case ERASE:
-                looper.previousState = ERASE;
-                if (looper.framePointer >= looper.endFramePosition) {
-                    looper.state = ARMED;
-                    looper.previousState = ERASE;
-                    loopButton.setColor(LOOPLED_ARMED);
-                }
-                break;
-
-            default:
-                break;
-            }
+        switch (fxSelector.justSwitchedTo()) {
+        case FX_FREQ_SHIFT:
+            effects_library.refreshUi = true;
+            break;
+        case FX_LOOPER:
+            looper.refreshUi = true;
+            break;
+        default:
+            break;
         }
-        if (fxSelector.justSwitchedTo(FX_FREQ_SHIFT)) {
-            loopButton.setColor(LOOPLED_OFF);
+        if (fxSelector.getSelectedFx() == FX_LOOPER) {
+            renderLooper();
+        }
+        else {
+            renderFx();
         }
         break;
     case UI_modeSwitches_update:
         fxSelector.update();
-        if (fxSelector.justSwitchedTo(FX_LOOPER)) {
-            looper.state = ARMED;
-            loopButton.setColor(LOOPLED_ARMED);
-            loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
-        }
+        // if (fxSelector.justSwitchedTo(FX_LOOPER)) { }
         break;
     case UI_tresholdcv_update:
         rolloSelector.update();
@@ -210,6 +135,105 @@ void UI::render() {
     }
     // update the state
     current_ui_state = (UiState)(((uint8_t)current_ui_state + 1) % NUMBEROFUISTATES);
+}
+
+void UI::renderFx() {
+    if (loopButton.checkRisingEdge()) {
+        effects_library.refreshUi = true;
+        effects_library.nextEffect();
+    }
+    switch (effects_library.algo) {
+    case DSP_BYPASS:
+        if (effects_library.refreshUi) {
+            loopButton.setColor(COL_NONE);
+        }
+        break;
+
+    case DSP_FREQUENCY_SHIFTER:
+        if (effects_library.refreshUi) {
+            loopButton.setColor(COL_BLUE);
+        }
+        break;
+    case DSP_DECIMATOR:
+        if (effects_library.refreshUi) {
+            loopButton.setColor(COL_PINK);
+        }
+        break;
+    }
+}
+
+void UI::renderLooper() {
+    switch (looper.state) {
+    case ARMED:
+        if (looper.refreshUi) {
+            loopButton.setColor(LOOPLED_ARMED);
+            loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
+            looper.refreshUi = false;
+        }
+        if (loopButton.checkRisingEdge()) {
+            looper.switchState(RECORD);
+            looper.framePointer = 0;
+        }
+        break;
+    case RECORD:
+        if (looper.refreshUi) {
+            loopButton.setColor(LOOPLED_RECORD);
+            loopButton.setIntensity(LOOPLED_HIGH_INTENSITY);
+            looper.refreshUi = false;
+        }
+        if (loopButton.checkFallingEdge() || looper.framePointer >= MAX_FRAME_NUM) {
+            looper.switchState(PLAYBACK);
+            looper.endFramePosition = looper.framePointer - 1;
+            looper.framePointer = 0;
+            looper.doFadeOut = FRAME_NUMBER_FADE_IN;
+        }
+        break;
+    case PLAYBACK:
+        if (looper.refreshUi) {
+            loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
+            loopButton.setColor(LOOPLED_PLAYBACK);
+            looper.refreshUi = false;
+        }
+        if (looper.endFramePosition >= BLINK_FRAME_THRESHOLD + BLINK_GUARD_INTERVAL) {
+            if (looper.framePointer >= looper.endFramePosition - BLINK_FRAME_THRESHOLD) {
+                loopButton.setIntensity(0);
+            }
+            else if (looper.framePointer == 0) {
+                loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
+            }
+        }
+        if (loopButton.checkRisingEdge()) {
+            looper.switchState(OVERDUB);
+            looper.doOverdubFadeIn = FRAME_NUMBER_FADE_IN;
+        }
+        break;
+    case OVERDUB:
+        if (looper.refreshUi) {
+            loopButton.setColor(LOOPLED_OVERDUB);
+            loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
+            looper.refreshUi = false;
+        }
+        if (loopButton.checkFallingEdge()) {
+            if (loopButton.wasShortPress()) {
+                looper.switchState(ERASE);
+            }
+            else {
+                looper.doOverdubFadeOut = FRAME_NUMBER_FADE_IN;
+                //    looper.switchState(PLAYBACK);
+            }
+        }
+        break;
+    case ERASE:
+        if (looper.refreshUi) {
+            loopButton.setColor(LOOPLED_ERASE);
+            loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
+            looper.refreshUi = false;
+        }
+        if (looper.framePointer >= looper.endFramePosition) {
+            looper.switchState(ARMED);
+        }
+        break;
+    }
 }
 
 /*

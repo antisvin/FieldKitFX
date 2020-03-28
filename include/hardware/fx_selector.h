@@ -17,7 +17,13 @@
 
 namespace fieldkitfx {
 
-enum FxSelectorState { FX_FREQ_SHIFT = 0, FX_LOOPER, CALIBRATION, FX_UNSET };
+enum FxSelectorState {
+    FX_FREQ_SHIFT = 0,
+    FX_LOOPER,
+    CALIBRATION,
+    FX_UNSET,
+    FX_UNCHANGED
+};
 
 class FxSelector {
 protected:
@@ -32,6 +38,7 @@ public:
     void switchToCalibration();
     FxSelectorState getSelectedFx();
     bool justSwitchedTo(FxSelectorState fx);
+    FxSelectorState justSwitchedTo();
 };
 
 extern FxSelector fxSelector;

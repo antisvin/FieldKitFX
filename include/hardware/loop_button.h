@@ -8,6 +8,7 @@
 
 #include "stm32f3xx.h"
 #include "stm32f3xx_hal.h"
+#include "hardware/colors.h"
 #include "hardware/rgb_led.h"
 #include "utils/utils.h"
 
@@ -61,6 +62,9 @@ public:
     bool wasLongPress();
     bool isLongPress();
     void setColor(uint8_t red, uint8_t green, uint8_t blue);
+    void setColor(Color color) {
+        setColor(colors[color][0], colors[color][1], colors[color][2]);
+    };
     void setIntensity(uint8_t intensity);
     bool isLow();
     bool isHigh();

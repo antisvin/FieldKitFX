@@ -21,9 +21,10 @@ void FxSelector::init() {
 
 void FxSelector::update() {
     previous = current;
-    if(HAL_GPIO_ReadPin(FXSELECTOR_PORT, FXSELECTOR_PIN)) {
+    if (HAL_GPIO_ReadPin(FXSELECTOR_PORT, FXSELECTOR_PIN)) {
         current = FX_FREQ_SHIFT;
-    } else {
+    }
+    else {
         current = FX_LOOPER;
     }
 }
@@ -39,6 +40,10 @@ FxSelectorState FxSelector::getSelectedFx() {
 
 bool FxSelector::justSwitchedTo(FxSelectorState fx) {
     return (current == fx) && (previous != fx);
+}
+
+FxSelectorState FxSelector::justSwitchedTo() {
+    return (current == previous) ? FX_UNCHANGED : current;
 }
 
 }

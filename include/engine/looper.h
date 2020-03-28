@@ -43,19 +43,17 @@ private:
     DISALLOW_COPY_AND_ASSIGN(Looper);
 
 public:
-    uint8_t flag;
     uint16_t framePointer;
     uint16_t endFramePosition;
-    LooperState state, previousState;
+    LooperState state;
     uint8_t doFadeIn, doFadeOut;
     uint8_t doOverdubFadeIn, doOverdubFadeOut;
+    bool refreshUi;
 
     Looper() = default;
     void init(RamChip* ram);
-    void process();
-    void processBitcrush(float* inputBuffer, float* outputBuffer, uint16_t ADCValue);
-    void processSampleRateReducer(
-        float* inputBuffer, float* outputBuffer, uint16_t ADCValue);
+    void process(float* in, float* out);
+    void switchState(LooperState new_state);
 };
 
 extern Looper looper;

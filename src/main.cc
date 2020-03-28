@@ -8,6 +8,7 @@
 
 #include "main.h"
 #include "engine/engine.h"
+#include "engine/effects.h"
 #include "engine/frequency_shifter.h"
 #include "engine/looper.h"
 #include "engine/sequencer.h"
@@ -23,6 +24,7 @@
 using namespace fieldkitfx;
 
 UI ui;
+FrequencyShifter fs;
 
 int main(void) {
     /*
@@ -62,7 +64,6 @@ int main(void) {
     /*
      * set up a frequency shifter instance
      */
-    FrequencyShifter fs;
     fs.setSideBandXfade(1.0); // only output the USB
 
     /*
@@ -118,49 +119,24 @@ int main(void) {
      */
 
     uint32_t eventCounter = 0;
+    float tmp_buffer[USER_AUDIO_IO_BUFFER_SIZE];
 
     for (;;) {
         switch (fxSelector.getSelectedFx()) {
         case FX_FREQ_SHIFT:
-            /*
-             * Frequency shifter
-             */
-            if (!user_audio_out_buffer.isFull() && !user_audio_in_buffer.isEmpty()) {
-                /*
-                 * Process a sample with the frequency shifter
-                 */
-                user_audio_in_buffer.pop(&sample);
-                fs.processSample(&sample);
-                user_audio_out_buffer.push(sample);
-            }
-            else {
-                if (eventCounter & (1 << 0)) {
-                    fs.updateCVs();
-                }
-                else {
-                    ui.render();
-                }
-                eventCounter++;
-            }
-            break;
         case FX_LOOPER:
             /*
              * Looper
              */
             if (user_audio_in_buffer.isFull()) {
                 // Looper state machine
-                looper.process();
+                effects_library.updateParams();
+                effects_library.process(user_audio_in_buffer.buffer, tmp_buffer);
+                user_audio_in_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
+
                 // apply the looper effects
-                /*
-                 * Bitcrusher
-                 */
-                looper.processBitcrush(user_audio_out_buffer.buffer,
-                    user_audio_out_buffer.buffer, ADC_getMixedCV1());
-                /*
-                 * SRR
-                 */
-                looper.processSampleRateReducer(user_audio_out_buffer.buffer,
-                    user_audio_out_buffer.buffer, ADC_getMixedCV2());
+                looper.process(tmp_buffer, user_audio_out_buffer.buffer);
+                user_audio_out_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
             }
             else {
                 ui.render();

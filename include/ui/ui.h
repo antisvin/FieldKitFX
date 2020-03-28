@@ -68,10 +68,13 @@ enum UiStateCalibration {
 };
 
 class UI {
+private:
     UiState current_ui_state;
     UiStateCalibration current_ui_state_calibration;
     TIM_HandleTypeDef UITimer;
     bool matrixRefreshFlag;
+    void renderLooper();
+    void renderFx();
 
 public:
     MagnitudeTracker magnitude_tracker;
