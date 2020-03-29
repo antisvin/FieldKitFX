@@ -31,6 +31,7 @@ private:
     size_t position {};
 
 public:
+    T last_result;
     T process(T input_sample) {
         // update sum sum
         // sum = sum - line[length - 1] + input_sample;
@@ -40,19 +41,14 @@ public:
             position = 0;
         }
 
-        // shift the line
-        /*
-        T* tmp = &(line[length - 1]);
-        while (tmp != line) {
-            *tmp = *(--tmp);
-        }
-        */
+        last_result = sum / length;
+        return last_result;
+    }
 
-        // insert the new sample
-        //*tmp = input_sample;
-        // return average
-        return sum / length;
+    float asFloat() {
+        return (float)sum / length;
     }
 };
+
 } // namespace fieldkitfx
 #endif /* MOVINGAVERAGEFILTER_H_ */

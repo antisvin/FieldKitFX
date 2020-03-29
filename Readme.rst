@@ -18,6 +18,11 @@ The code in this repository is licensed under the GNU General Public License v3.
 Release history
 ===============
 
+0.3.1
+-----
+
+* Additional DSP effect - morphable comb/allpass filter
+
 0.3.0
 -----
 

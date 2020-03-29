@@ -13,11 +13,10 @@ class FrequencyShifterEffect : public DspEffect {
 private:
     QuadratureOscillator oscillator {};
     HilbertTransformer transformer {};
+    float amount, control;
 
 public:
     void process(const float* in, float* out) override {
-        float control = static_cast<float>(last_param1 & 0xff0) / ADC_RESOLUTION_DEZ;
-        float amount = freqCVLUT[ADC_RESOLUTION_DEZ - last_param2];
         oscillator.setFreq(amount);
 
         for (int i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
@@ -34,6 +33,12 @@ public:
 
             *(out++) = clip(sample_I);
         }
+    }
+
+    void updateParams(DspParam* param1, DspParam* param2) {
+        amount = freqCVLUT[ADC_RESOLUTION_DEZ - param1->last_result];
+        // float control = (float)(last_param1 & 0xff0) / ADC_RESOLUTION_DEZ;
+        control = param2->asFloat() / ADC_RESOLUTION_DEZ;
     }
 };
 }

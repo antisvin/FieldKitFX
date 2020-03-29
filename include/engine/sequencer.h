@@ -58,10 +58,9 @@ enum SequencerMode {
 /*
  * Declaration of the step, allows to connect one LED to one CV-source
  */
-class Step
-{
+class Step {
 private:
-    DISALLOW_COPY_AND_ASSIGN(Step);
+    //    DISALLOW_COPY_AND_ASSIGN(Step);
 
 public:
     Led* step_led;
@@ -75,8 +74,7 @@ public:
  * this value is compared against the counter register of the timer
  */
 
-class EnvelopeState
-{
+class EnvelopeState {
 private:
     DISALLOW_COPY_AND_ASSIGN(EnvelopeState);
 
@@ -88,8 +86,7 @@ public:
     EnvelopeState() {};
 };
 
-class Sequencer
-{
+class Sequencer {
 private:
     DISALLOW_COPY_AND_ASSIGN(Sequencer);
 

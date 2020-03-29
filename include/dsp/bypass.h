@@ -15,6 +15,8 @@ public:
         std::copy(in, in + USER_AUDIO_IO_BUFFER_SIZE, out);
     }
 
+    void updateParams(DspParam* param1, DspParam* param2) {};
+
 private:
     DISALLOW_COPY_AND_ASSIGN(BypassEffect);
 };

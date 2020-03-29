@@ -1,0 +1,3 @@
+[submodule "lib/stmlib"]
+	path = lib/stmlib
+	url = https://github.com/pichenettes/stmlib

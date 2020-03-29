@@ -7,6 +7,7 @@
 #define RANDOMUTILS_H_
 
 #include <cstdint>
+#include "stmlib/dsp/dsp.h"
 
 namespace fieldkitfx {
 /*
@@ -17,9 +18,9 @@ namespace fieldkitfx {
  * clips a float to [-1.0,1.0]
  */
 inline float clip(float input) {
-    if(input > 1.0f)
+    if (input > 1.0f)
         return 1.0f;
-    else if(input < -1.0f)
+    else if (input < -1.0f)
         return -1.0f;
     else
         return input;
@@ -61,8 +62,10 @@ inline float crossfade(float a, float b, float fade) {
 
 }
 
+/*
 #define DISALLOW_COPY_AND_ASSIGN(TypeName)                                     \
     TypeName(const TypeName&) = delete;                                        \
     void operator=(const TypeName&) = delete;
+*/
 
 #endif /* RANDOMUTILS_H_ */

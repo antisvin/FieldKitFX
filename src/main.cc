@@ -9,7 +9,6 @@
 #include "main.h"
 #include "engine/engine.h"
 #include "engine/effects.h"
-#include "engine/frequency_shifter.h"
 #include "engine/looper.h"
 #include "engine/sequencer.h"
 #include "engine/timer.h"
@@ -24,7 +23,6 @@
 using namespace fieldkitfx;
 
 UI ui;
-FrequencyShifter fs;
 
 int main(void) {
     /*
@@ -60,16 +58,6 @@ int main(void) {
      */
     codec_ConfigGPIO();
     codec_ConfigAudioInterface();
-
-    /*
-     * set up a frequency shifter instance
-     */
-    fs.setSideBandXfade(1.0); // only output the USB
-
-    /*
-     * set a initial shift amount (500Hz)
-     */
-    fs.setShiftAmt(500);
 
     /*
      * sample to process
