@@ -1,6 +1,7 @@
 #ifndef _ENGINE_EFFECTS_H_
 #define _ENGINE_EFFECTS_H_
 
+#include "dsp/allpass_filter.h"
 #include "dsp/bypass.h"
 #include "dsp/comb_filter.h"
 #include "dsp/decimator.h"
@@ -14,6 +15,7 @@ enum EffectAlgo {
     DSP_BYPASS = 0,
     DSP_FREQUENCY_SHIFTER,
     DSP_DECIMATOR,
+    DSP_ALLPASS,
     DSP_COMB,
 };
 
@@ -28,6 +30,7 @@ public:
     DspParam param1, param2;
 
     EffectsLibrary() {
+        allpass_filter.init(shared_buffer);
         comb_filter.init(shared_buffer);
         algo = DSP_FREQUENCY_SHIFTER;
     }
@@ -42,13 +45,15 @@ private:
     BypassEffect bypass;
     DecimatorEffect decimator;
     FrequencyShifterEffect frequency_shifter;
+    AllpassFilterEffect allpass_filter;
     CombFilterEffect comb_filter;
 
-    static constexpr uint8_t num_effects = 4;
+    static constexpr uint8_t num_effects = 5;
     DspEffect* effects[num_effects] = {
         &bypass,
         &frequency_shifter,
         &decimator,
+        &allpass_filter,
         &comb_filter,
     };
 

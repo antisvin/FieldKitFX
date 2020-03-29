@@ -1,6 +1,7 @@
 #ifndef _ENGINE_DELAY_LINE_H_
 #define _ENGINE_DELAY_LINE_H_
 
+#include <algorithm>
 #include "utils/utils.h"
 #include "stmlib/dsp/dsp.h"
 

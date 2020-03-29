@@ -1,0 +1,41 @@
+#ifndef _DSP_ALLPASS_FILTER_H_
+#define _DSP_ALLPASS_FILTER_H_
+
+#include "dsp/dsp.h"
+#include "engine/delay_line.h"
+#include "utils/utils.h"
+
+namespace fieldkitfx {
+
+class AllpassFilterEffect : public DspEffect {
+public:
+    float delay, feedback;
+
+    AllpassFilterEffect() = default;
+
+    void init(float* buffer) {
+        delay_line.Init(buffer);
+    };
+
+    void process(const float* in, float* out) override {
+        for (size_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
+            out[i] = delay_line.Allpass(in[i], delay, feedback);
+        }
+    };
+    void reset() {
+        delay_line.Reset();
+    }
+
+    void updateParams(DspParam* param1, DspParam* param2) {
+        delay = param1->asFloat() / ADC_RESOLUTION_DEZ * (shared_buffer_size - 1);
+        feedback = param2->asFloat() / ADC_RESOLUTION_DEZ;
+    }
+
+private:
+    DelayLine<float, shared_buffer_size> delay_line;
+    DISALLOW_COPY_AND_ASSIGN(AllpassFilterEffect);
+};
+
+}
+
+#endif

@@ -1,7 +1,6 @@
 #ifndef _DSP_COMB_FILTER_H_
 #define _DSP_COMB_FILTER_H_
 
-#include <array>
 #include "dsp/dsp.h"
 #include "engine/delay_line.h"
 #include "utils/utils.h"
@@ -20,17 +19,21 @@ public:
 
     void process(const float* in, float* out) override {
         for (size_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
-            // delay_line.Write(in[i]);
-            // out[i] = in[i] + delay_line.Read(delay) * feedback;
-
-            // out[i] = delay_line.Read(delay) * feedback + in[i];
-            // delay_line.Write(out[i]);
-
-            float tmp1 = delay_line.Read(delay);
-            float tmp2 = in[i] - tmp1 * feedback;
-            delay_line.Write(tmp2);
-            out[i] = tmp1 + tmp2 * feedback;
-            // out[i] = delay_line.Read(delay)
+            if (feedback < 0) {
+                // Feed forward comb
+                delay_line.Write(in[i]);
+                out[i] = in[i] - delay_line.Read(delay) * feedback;
+            }
+            else if (feedback > 0) {
+                // Feed back comb
+                out[i] = in[i] + delay_line.Read(delay) * feedback;
+                delay_line.Write(out[i]);
+            }
+            else {
+                // Pass-thru, but add data to delay line
+                delay_line.Write(in[i]);
+                out[i] = in[i];
+            }
         }
     };
     void reset() {
@@ -38,8 +41,8 @@ public:
     }
 
     void updateParams(DspParam* param1, DspParam* param2) {
-        delay = param1->asFloat() / 4095.0f * (shared_buffer_size - 1);
-        feedback = param2->asFloat() / 4095.0f;
+        delay = param1->asFloat() / ADC_RESOLUTION_DEZ * (shared_buffer_size - 1.0f);
+        feedback = (param2->asFloat() * 2) / ADC_RESOLUTION_DEZ - 1.0f;
     }
 
 private:

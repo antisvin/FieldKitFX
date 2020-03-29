@@ -159,9 +159,14 @@ void UI::renderFx() {
             loopButton.setColor(COL_PINK);
         }
         break;
-    case DSP_COMB:
+    case DSP_ALLPASS:
         if (effects_library.refreshUi) {
             loopButton.setColor(COL_GREEN);
+        }
+        break;
+    case DSP_COMB:
+        if (effects_library.refreshUi) {
+            loopButton.setColor(COL_ORANGE);
         }
         break;
     }

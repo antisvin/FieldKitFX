@@ -12,8 +12,8 @@ void EffectsLibrary::nextEffect() {
 }
 
 void EffectsLibrary::updateParams() {
-    param1.process(ADC_getMixedCV2()) & 0xfff;
-    param2.process(ADC_getMixedCV1()) & 0xfff;
+    param1.process(ADC_getMixedCV2());
+    param2.process(ADC_getMixedCV1());
     effects[static_cast<uint8_t>(algo)]->updateParams(&param1, &param2);
 }
 

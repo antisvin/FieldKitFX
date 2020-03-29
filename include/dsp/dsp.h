@@ -1,6 +1,7 @@
 #ifndef _DSP_DSP_H_
 #define _DSP_DSP_H_
 
+#include "engine/audio_buffers.h"
 #include "hardware/adc.h"
 #include "hardware/colors.h"
 #include "utils/moving_average_filter.h"

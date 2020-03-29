@@ -21,7 +21,7 @@ Release history
 0.3.1
 -----
 
-* Additional DSP effect - morphable comb/allpass filter
+* Additional DSP effects - morphable comb (green LED) and allpass (orange LED) filters
 
 0.3.0
 -----

@@ -1,9 +1,7 @@
 #ifndef _DSP_BYPASS_H_
 #define _DSP_BYPASS_H_
 
-#include <algorithm>
 #include "dsp/dsp.h"
-#include "engine/audio_buffers.h"
 #include "utils/utils.h"
 
 namespace fieldkitfx {
