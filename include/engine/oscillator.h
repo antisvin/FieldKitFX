@@ -17,20 +17,43 @@
 
 namespace fieldkitfx {
 
-class QuadratureOscillator {
-private:
+class OscillatorBase {
+public:
+    OscillatorBase() = default;
+    void setFreq(float freq);
+    void update(void);
+
+protected:
+    bool freq_neg; // sign of the frequency, 0 if positive, 1 if negative
     uint32_t phaseAcc;
     uint32_t increment;
-    uint8_t freq_neg; // sign of the frequency, 0 if positive, 1 if negative
-    // the outputs of the oscillator
-    // for reference during the warping process
     float frequency;
-    DISALLOW_COPY_AND_ASSIGN(QuadratureOscillator);
 
+private:
+    DISALLOW_COPY_AND_ASSIGN(OscillatorBase);
+};
+
+class SineOscillator : public OscillatorBase {
 public:
-    QuadratureOscillator() = default;
-    float sineOut, cosineOut;
-    void setFreq(float freq);
+    float sineOut;
+    void update(void);
+};
+
+class SawOscillator : public OscillatorBase {
+public:
+    float sawOut;
+    void update(void);
+};
+
+class TriangleOscillator : public OscillatorBase {
+public:
+    float triangleOut;
+    void update(void);
+};
+
+class QuadratureOscillator : public SineOscillator {
+public:
+    float cosineOut;
     void update(void);
 };
 

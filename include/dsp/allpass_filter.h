@@ -2,7 +2,6 @@
 #define _DSP_ALLPASS_FILTER_H_
 
 #include "dsp/dsp.h"
-#include "engine/delay_line.h"
 #include "utils/utils.h"
 
 namespace fieldkitfx {

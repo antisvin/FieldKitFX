@@ -2,6 +2,7 @@
 #define _DSP_DSP_H_
 
 #include "engine/audio_buffers.h"
+#include "engine/delay_line.h"
 #include "hardware/adc.h"
 #include "hardware/colors.h"
 #include "utils/moving_average_filter.h"

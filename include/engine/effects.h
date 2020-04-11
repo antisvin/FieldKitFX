@@ -1,11 +1,16 @@
 #ifndef _ENGINE_EFFECTS_H_
 #define _ENGINE_EFFECTS_H_
 
-#include "dsp/allpass_filter.h"
+//#include "dsp/allpass_filter.h"
+#include "dsp/barberpole_phaser.h"
 #include "dsp/bypass.h"
+#include "dsp/chorus.h"
 #include "dsp/comb_filter.h"
 #include "dsp/decimator.h"
+#include "dsp/distfolder.h"
 #include "dsp/frequency_shifter.h"
+#include "dsp/phaser.h"
+#include "dsp/tz_flanger.h"
 #include "utils/moving_average_filter.h"
 #include "utils/utils.h"
 
@@ -13,10 +18,11 @@ namespace fieldkitfx {
 
 enum EffectAlgo {
     DSP_BYPASS = 0,
-    DSP_FREQUENCY_SHIFTER,
+    DSP_BARBERPOLE_PHASER,
+    DSP_TZ_FLANGER,
+    DSP_CHORUS,
     DSP_DECIMATOR,
-    DSP_ALLPASS,
-    DSP_COMB,
+    DSP_PHASER
 };
 
 //__attribute__((section(".ccmram")))
@@ -30,9 +36,13 @@ public:
     DspParam param1, param2;
 
     EffectsLibrary() {
-        allpass_filter.init(shared_buffer);
-        comb_filter.init(shared_buffer);
-        algo = DSP_FREQUENCY_SHIFTER;
+        barberpole_phaser.init(shared_buffer);
+        tz_flanger.init(shared_buffer);
+        chorus.init(shared_buffer);
+        // comb_filter.init(shared_buffer);
+        // dist_folder.init(shared_buffer);
+        phaser.init(shared_buffer);
+        algo = (EffectAlgo)(1);
     }
     void nextEffect();
     void updateParams();
@@ -44,17 +54,24 @@ public:
 private:
     BypassEffect bypass;
     DecimatorEffect decimator;
-    FrequencyShifterEffect frequency_shifter;
-    AllpassFilterEffect allpass_filter;
-    CombFilterEffect comb_filter;
+    BarberpolePhaserEffect barberpole_phaser;
+    TzFlangerEffect tz_flanger;
+    // AllpassFilterEffect allpass_filter;
+    // CombFilterEffect comb_filter;
+    ChorusEffect chorus;
+    // DistFolderEffect dist_folder;
+    PhaserEffect phaser;
 
-    static constexpr uint8_t num_effects = 5;
+    static constexpr uint8_t num_effects = 6;
     DspEffect* effects[num_effects] = {
         &bypass,
-        &frequency_shifter,
+        &barberpole_phaser,
+        &tz_flanger,
+        //&allpass_filter,
+        //&comb_filter,
+        &chorus,
         &decimator,
-        &allpass_filter,
-        &comb_filter,
+        &phaser,
     };
 
     DISALLOW_COPY_AND_ASSIGN(EffectsLibrary);

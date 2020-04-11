@@ -21,7 +21,8 @@ Release history
 0.3.1
 -----
 
-* Additional DSP effects - morphable comb (green LED) and allpass (orange LED) filters
+* Replaced frequency shifter with barberpole phaser effect.
+* Current DSP effects are: barberpole phaser (blue LED), through-zero flanger (pink LED), chorus (green LED), decimator (orange LED), phaser (red LED).
 
 0.3.0
 -----

@@ -24,6 +24,7 @@ public:
             transformer.process(sample_I);
             oscillator.update();
 
+            sample_I = oscillator.sineOut * transformer.outputSample_1;
             float sample_Q = oscillator.cosineOut * transformer.outputSample_2;
             float sample_USB = sample_I - sample_Q;
             float sample_LSB = sample_I + sample_Q;

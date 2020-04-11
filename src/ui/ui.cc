@@ -148,25 +148,29 @@ void UI::renderFx() {
             loopButton.setColor(COL_NONE);
         }
         break;
-
-    case DSP_FREQUENCY_SHIFTER:
+    case DSP_BARBERPOLE_PHASER:
         if (effects_library.refreshUi) {
             loopButton.setColor(COL_BLUE);
         }
         break;
-    case DSP_DECIMATOR:
+    case DSP_TZ_FLANGER:
         if (effects_library.refreshUi) {
             loopButton.setColor(COL_PINK);
         }
         break;
-    case DSP_ALLPASS:
+    case DSP_CHORUS:
         if (effects_library.refreshUi) {
             loopButton.setColor(COL_GREEN);
         }
         break;
-    case DSP_COMB:
+    case DSP_DECIMATOR:
         if (effects_library.refreshUi) {
             loopButton.setColor(COL_ORANGE);
+        }
+        break;
+    case DSP_PHASER:
+        if (effects_library.refreshUi) {
+            loopButton.setColor(COL_RED);
         }
         break;
     }

@@ -17,7 +17,9 @@ public:
 
     void Init(float* buffer) {
         line_ = buffer;
-        Reset();
+        // There's no need to reset here - it will be zero-filled already
+        // and we reuse the same buffer for multiple effects.
+        // Reset();
     }
 
     void Reset() {
