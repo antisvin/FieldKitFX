@@ -11,6 +11,7 @@
 #include "engine/effects.h"
 #include "engine/looper.h"
 #include "engine/sequencer.h"
+#include "engine/settings.h"
 #include "engine/timer.h"
 #include "hardware/adc.h"
 #include "hardware/codec.h"
@@ -22,6 +23,7 @@
 
 using namespace fieldkitfx;
 
+Settings settings;
 UI ui;
 
 int main(void) {
@@ -74,6 +76,8 @@ int main(void) {
      * Initializes the CS pin and sets it idle
      */
     RAMArray.init();
+
+    settings.Init();
 
     /*
      * Looper init

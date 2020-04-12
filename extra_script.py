@@ -14,7 +14,7 @@ tokens = [t for t in tokens if t not in archives]			# remove the archives from t
 #rebuild a new string with --whole-archive option pair surrounding the archives
 newLibString = ' '.join([tokens[0] , "-Wl,--whole-archive"] + archives + ["-Wl,--no-whole-archive"] +tokens[1:])
 env.Replace(
-  _LIBFLAGS=newLibString,
-  LINKCOM='$LINK -o $TARGET $LINKFLAGS $__RPATH $SOURCES $_LIBDIRFLAGS $_LIBFLAGS'
+    _LIBFLAGS=newLibString,
+    LINKCOM='$LINK -o $TARGET $LINKFLAGS $__RPATH $SOURCES $_LIBDIRFLAGS $_LIBFLAGS'
 )
-
+env.Replace(LDSCRIPT_PATH="boards/STM32F303VC_FLASH_LARGE_APP.ld")
