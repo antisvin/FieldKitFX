@@ -56,7 +56,7 @@ public:
 private:
     QuadratureOscillator oscillator {};
     HilbertTransformer transformer {};
-    constexpr static size_t num_stages = 32;
+    constexpr static size_t num_stages = 16;
     DelayLine<float, 1> stages[num_stages];
     float prev_sample, feedback;
 

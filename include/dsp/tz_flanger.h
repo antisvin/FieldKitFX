@@ -33,7 +33,7 @@ public:
         for (int i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
             lfo.update();
             float dry = dry_delay.WriteRead(in[i], flanger_max_delay / 2);
-            float wet_delay_len = flanger_max_delay / 2 * (1 + lfo.sineOut * depth);
+            float wet_delay_len = (float)(flanger_max_delay / 2) * (1.0f + lfo.sineOut * depth);
             float wet = wet_delay.WriteRead(in[i], wet_delay_len);
             *(out++) = (dry + wet) / 2;
         }
