@@ -15,6 +15,75 @@ License
 
 The code in this repository is licensed under the GNU General Public License v3.0.
 
+UI changes
+==========
+
+This firmware decouples FX selection from looper control, so upper switch toggles looper control and FX selection modes. We also have more effects now.
+
+Barberpole phaser
+-----------------
+
+This effect is a variation of phaser. It imitates "infinite" notch movemement going up or down.
+
+    Led color
+        Blue
+
+    Control 1
+        Effect amount (bipolar, so you can change rising and falling movement)
+
+    Control 2
+        Feedback amount
+
+Thru-zero flanger
+-----------------
+
+Original analog effect was implemented by two identical tape reels, one of them was getting slowed down and sped up relative to the other.
+
+    Led color
+        Pink
+    Control 1
+        Modulation depth
+    Control 2:
+        Modulation rate
+
+Phaser
+------
+
+A common effect based on two copies of signal with different phase offsets. Summing them gives us a moving distribution of notches due to parts of signals canceling each other.
+
+    Led color
+        Green
+    Control 1
+        Modulation depth before 12 o'clock, modulation rate above 12 o'clock
+    Control 2
+        Allpass filter coefficients selection - this changes phaser character considerably
+
+Chorus
+------
+
+This effect is based on mixing of signal with its one or more delayed copies.
+
+    Led color
+        Orange
+    Control 1
+        When it's turned to less than 12 o'clock, a single sine LFO is used and this control changes modulation depth.
+        After 12 o'clock it adds a second delay line with triangular LFO running at half frequency.
+    Control 2
+        Base rate for LFOs
+
+Decimator
+---------
+
+This effect was present in original firmare and is mostly unchanged.
+
+    Led color
+        Red
+    Control 1
+        Samplerate reduction amount
+    Control 2
+        Bit depth reduction amount
+
+
 Release history
 ===============
 
@@ -22,7 +91,7 @@ Release history
 -----
 
 * Replaced frequency shifter with barberpole phaser effect.
-* Current DSP effects are: barberpole phaser (blue LED), through-zero flanger (pink LED), chorus (green LED), decimator (orange LED), phaser (red LED).
+* Added more DSP effects
 
 0.3.0
 -----

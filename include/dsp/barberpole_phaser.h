@@ -13,13 +13,13 @@ namespace fieldkitfx {
 class BarberpolePhaserEffect : public DspEffect {
 public:
     void init(float* shared_buffer) {
-        for (auto i = 0; i < num_stages; i++) {
+        for (size_t i = 0; i < num_stages; i++) {
             stages[i].Init(shared_buffer + i);
         }
     }
 
     void reset() {
-        for (auto i = 0; i < num_stages; i++) {
+        for (size_t i = 0; i < num_stages; i++) {
             stages[i].Reset();
         }
     }
@@ -29,7 +29,7 @@ public:
             float tmp = in[i]; // + prev_sample * feedback;
             tmp += prev_sample * feedback;
             // Active number of stages are written and read
-            for (auto j = 0; j < num_stages; j++) {
+            for (size_t j = 0; j < num_stages; j++) {
                 tmp = stages[j].Allpass(tmp, 0.0f, -0.5f);
             }
 

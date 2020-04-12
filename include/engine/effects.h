@@ -20,9 +20,9 @@ enum EffectAlgo {
     DSP_BYPASS = 0,
     DSP_BARBERPOLE_PHASER,
     DSP_TZ_FLANGER,
+    DSP_PHASER,
     DSP_CHORUS,
     DSP_DECIMATOR,
-    DSP_PHASER
 };
 
 //__attribute__((section(".ccmram")))
@@ -67,11 +67,11 @@ private:
         &bypass,
         &barberpole_phaser,
         &tz_flanger,
+        &phaser,
         //&allpass_filter,
         //&comb_filter,
         &chorus,
         &decimator,
-        &phaser,
     };
 
     DISALLOW_COPY_AND_ASSIGN(EffectsLibrary);

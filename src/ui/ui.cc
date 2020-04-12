@@ -83,6 +83,8 @@ void UI::render() {
         loopButton.updateStates();
         switch (fxSelector.justSwitchedTo()) {
         case FX_FREQ_SHIFT:
+            // Reset intensity to normal in case if it was blinking
+            loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
             effects_library.refreshUi = true;
             break;
         case FX_LOOPER:
@@ -158,17 +160,17 @@ void UI::renderFx() {
             loopButton.setColor(COL_PINK);
         }
         break;
-    case DSP_CHORUS:
+    case DSP_PHASER:
         if (effects_library.refreshUi) {
             loopButton.setColor(COL_GREEN);
         }
         break;
-    case DSP_DECIMATOR:
+    case DSP_CHORUS:
         if (effects_library.refreshUi) {
             loopButton.setColor(COL_ORANGE);
         }
         break;
-    case DSP_PHASER:
+    case DSP_DECIMATOR:
         if (effects_library.refreshUi) {
             loopButton.setColor(COL_RED);
         }
