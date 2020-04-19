@@ -26,6 +26,8 @@
 
 namespace fieldkitfx {
 
+constexpr uint8_t num_buttons = 11;
+
 class ButtonArray {
 private:
     SPI_HandleTypeDef* spiController;
@@ -41,9 +43,11 @@ public:
     void checkCombinations();
     void resetCombinations();
     uint16_t getActiveCombination();
+    uint8_t getFirstPressed();
     bool isRisingEdge(uint8_t index);
     bool isFallingEdge(uint8_t index);
     bool isPressed(uint8_t index);
+    bool isPressed();
 };
 
 }

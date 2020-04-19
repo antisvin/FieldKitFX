@@ -61,11 +61,6 @@ int main(void) {
     codec_ConfigGPIO();
     codec_ConfigAudioInterface();
 
-    /*
-     * sample to process
-     */
-    float sample;
-
     /*============================================================================================================*/
     /*
      * External memory Init
@@ -90,7 +85,7 @@ int main(void) {
     /*
      * UI Init
      */
-    ui.init();
+    ui.init(&settings);
 
     // cvMatrix.forceSyncLedsToDestinations();
 
@@ -114,49 +109,47 @@ int main(void) {
     float tmp_buffer[USER_AUDIO_IO_BUFFER_SIZE];
 
     for (;;) {
-        switch (fxSelector.getSelectedFx()) {
-        case FX_FREQ_SHIFT:
-        case FX_LOOPER:
-            /*
-             * Looper
-             */
-            if (user_audio_in_buffer.isFull()) {
-                user_audio_in_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
+        /*
+         * Looper
+         */
+        if (user_audio_in_buffer.isFull()) {
+            if (!(fxSelector.getSelectedFx() == FX_FREQ_SHIFT && ui.pauseAudio())) {
                 // Looper state machine
                 effects_library.updateParams();
                 effects_library.process(user_audio_in_buffer.buffer, tmp_buffer);
+                user_audio_in_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
 
                 // apply the looper effects
                 looper.process(tmp_buffer, user_audio_out_buffer.buffer);
                 user_audio_out_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
             }
-            else {
-                ui.render();
-            }
-            break;
-        default:
-            // in calibration mode
-            if (fxSelector.justSwitchedTo(CALIBRATION)) {
-                ui.initCalibration();
-                fxSelector.switchToCalibration();
-            }
-            if (!user_audio_out_buffer.isFull() && !user_audio_in_buffer.isEmpty()) {
-                // we want to feed trough the audio
-                user_audio_in_buffer.pop(&sample);
-                user_audio_out_buffer.push(sample);
-                // and we want to track the maximum amplitude
-                ui.magnitude_tracker.processSample(sample);
-            }
-            else {
-                if (eventCounter & (1 << 0)) {
-                    ui.renderCalibration();
+            ui.render();
+
+            /*
+                // in calibration mode
+                if (fxSelector.justSwitchedTo(CALIBRATION)) {
+                    ui.initCalibration();
+                    fxSelector.switchToCalibration();
+                }
+                if (!user_audio_out_buffer.isFull() && !user_audio_in_buffer.isEmpty()) {
+                    // we want to feed trough the audio
+                    user_audio_in_buffer.pop(&sample);
+                    user_audio_out_buffer.push(sample);
+                    // and we want to track the maximum amplitude
+                    ui.magnitude_tracker.processSample(sample);
                 }
                 else {
-                    codec_setInputGain(
-                        CODEC_REG_LEFT_LINE_IN, (ADC_getMixedCV2() >> 7));
+                    if (eventCounter & (1 << 0)) {
+                        ui.renderCalibration();
+                    }
+                    else {
+                        codec_setInputGain(
+                            CODEC_REG_LEFT_LINE_IN, (ADC_getMixedCV2() >> 7));
+                    }
+                    eventCounter++;
                 }
-                eventCounter++;
             }
+            */
         }
     }
 }

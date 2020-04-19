@@ -12,7 +12,8 @@ namespace fieldkitfx {
  * Initialize all the parts necessary to control and process the UI.
  */
 
-void UI::init(void) {
+void UI::init(Settings* settings_ptr) {
+    settings = settings_ptr;
     cvMatrix.init();
     fxSelector.init();
     current_ui_state = UI_modeSwitches_update;
@@ -83,9 +84,7 @@ void UI::render() {
         loopButton.updateStates();
         switch (fxSelector.justSwitchedTo()) {
         case FX_FREQ_SHIFT:
-            // Reset intensity to normal in case if it was blinking
-            loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
-            effects_library.refreshUi = true;
+            renderSettingsInit();
             break;
         case FX_LOOPER:
             looper.refreshUi = true;
@@ -97,7 +96,7 @@ void UI::render() {
             renderLooper();
         }
         else {
-            renderFx();
+            renderSettings();
         }
         break;
     case UI_modeSwitches_update:
@@ -139,7 +138,71 @@ void UI::render() {
     current_ui_state = (UiState)(((uint8_t)current_ui_state + 1) % NUMBEROFUISTATES);
 }
 
-void UI::renderFx() {
+void UI::renderSettingsInit() {
+    // Reset intensity to normal in case if it was blinking
+    loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
+
+    for (uint8_t page = 0; page < num_ui_pages; page++) {
+        pages[page]->reset();
+    }
+    effects_library.refreshUi = true;
+}
+
+void UI::setBlinkState(bool blink_started) {
+    if (blink_started) {
+        blink_counter = 0;
+        loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
+    }
+    else {
+        loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
+    }
+}
+
+void UI::updateBlink() {
+    switch (blink_counter++) {
+    case 0:
+        loopButton.setIntensity(0);
+        break;
+    case 1 << 7:
+        loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
+        break;
+    default:
+        break;
+    }
+}
+
+void UI::renderSettings() {
+    if (cvMatrix.ba.isPressed()) {
+        last_pressed_button = cvMatrix.ba.getFirstPressed();
+        if (last_pressed_button != (uint8_t)current_page_id) {
+            // New page selected
+            current_page_id = (UiPageId)last_pressed_button;
+            current_page = pages[last_pressed_button];
+            current_page->reset();
+            setBlinkState(true);
+        }
+        else {
+            // Same page that was previously active is selected
+            if (cvMatrix.ba.isRisingEdge(last_pressed_button)) {
+                setBlinkState(true);
+            }
+            else {
+                if (loopButton.checkRisingEdge()) {
+                    current_page->onLoopButtonPressed();
+                }
+            }
+        }
+        updateBlink();
+    }
+    else {
+        if (cvMatrix.ba.isFallingEdge(last_pressed_button)) {
+            // Button got depressed. It needs some antidepressants to feel better!
+            setBlinkState(false);
+            current_page->onButtonDepressed();
+        }
+    }
+
+    /*
     if (loopButton.checkRisingEdge()) {
         effects_library.refreshUi = true;
         effects_library.nextEffect();
@@ -176,6 +239,7 @@ void UI::renderFx() {
         }
         break;
     }
+    */
 }
 
 void UI::renderLooper() {
@@ -320,5 +384,4 @@ void UI::renderMagnitude(float magnitude) {
         previousMagnitude = scaledMagnitude;
     }
 }
-
 }

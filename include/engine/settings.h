@@ -43,11 +43,15 @@ struct PresetData {
     ModulationData mod_state;
 };
 
+struct CodecSettingsData {
+    uint8_t in_gain;
+    uint8_t out_gain;
+};
+
 struct PersistentData {
     ChannelCalibrationData input_calibration_data;
     PresetData presets[num_presets];
-    uint8_t in_gain;
-    uint8_t out_gain;
+    CodecSettingsData codec_settings_data;
     uint8_t padding[16];
     enum { tag = 0x494C4143 }; // CALI
 };
@@ -60,6 +64,8 @@ struct State {
 
 class Settings {
 public:
+    PresetData current_preset;
+
     Settings() {
     }
     ~Settings() {
@@ -78,12 +84,37 @@ public:
         return &persistent_data_.input_calibration_data;
     }
 
+    inline const PresetData& preset_data(size_t position) const {
+        return persistent_data_.presets[position];
+    }
+
+    inline PresetData* mutable_preset_data(size_t position) {
+        return &persistent_data_.presets[position];
+    }
+
+    inline const CodecSettingsData& codec_settings_data() const {
+        return persistent_data_.codec_settings_data;
+    }
+
+    inline CodecSettingsData* mutable_codec_settings_data() {
+        return &persistent_data_.codec_settings_data;
+    }
+
     inline const State& state() const {
         return state_;
     }
 
     inline State* mutable_state() {
         return &state_;
+    }
+
+    void loadPreset(uint8_t preset_id) {
+        current_preset = persistent_data_.presets[preset_id];
+    }
+
+    void storePreset(uint8_t preset_id) {
+        persistent_data_.presets[preset_id] = current_preset;
+        SavePersistentData();
     }
 
 private:

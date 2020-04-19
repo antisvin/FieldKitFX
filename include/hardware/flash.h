@@ -100,6 +100,7 @@ private:
 
         if (HAL_FLASHEx_Erase(&EraseInitStruct, &PageError) != HAL_OK) {
             // Error
+            __asm("bkpt");
         }
 
         WriteChunk(0, persistent_data_);
@@ -139,6 +140,7 @@ private:
         while (size) {
             if (HAL_FLASH_Program(TYPEPROGRAM_WORD, address, *words) != HAL_OK) {
                 // Error
+                __asm("bkpt");
             };
             address += 4;
             size -= 4;

@@ -32,7 +32,9 @@
 #include "engine/adsr.h"
 #include "engine/looper.h"
 #include "engine/sequencer.h"
+#include "engine/settings.h"
 #include "utils/magnitude_tracker.h"
+#include "ui/page.h"
 
 /*
  * Refresh period of the CV-Matrix.
@@ -68,23 +70,61 @@ enum UiStateCalibration {
 };
 
 class UI {
-private:
-    UiState current_ui_state;
-    UiStateCalibration current_ui_state_calibration;
-    TIM_HandleTypeDef UITimer;
-    bool matrixRefreshFlag;
-    void renderLooper();
-    void renderFx();
-
 public:
     MagnitudeTracker magnitude_tracker;
     UI() {};
-    void init();
+    void init(Settings* settings);
     void render();
     void initCalibration();
     void renderCalibration();
     void renderMagnitudeInit();
     void renderMagnitude(float magnitude);
+    void renderSettingsInit();
+
+    bool pauseAudio() {
+        return current_page_id == UI_VOCT;
+    }
+
+private:
+    UiState current_ui_state;
+    UiStateCalibration current_ui_state_calibration;
+    TIM_HandleTypeDef UITimer;
+    Settings* settings;
+    uint8_t blink_counter;
+    uint8_t last_pressed_button;
+    bool matrixRefreshFlag;
+    void renderLooper();
+    void renderSettings();
+    void setBlinkState(bool blink_started);
+    void updateBlink();
+
+    UiPageId current_page_id;
+    UiFxPage ui_page_fx1;
+    UiFxPage ui_page_fx2;
+    UiFxPage ui_page_fx3;
+    UiFxPage ui_page_fx4;
+    UiVcoPage ui_page_vco;
+    UiLooperPage ui_page_looper;
+    UiModulationPage ui_page_modulation;
+    UiVoctPage ui_page_voct;
+    UiVolumePage ui_page_volume;
+    UiPresetSavePage ui_page_preset_save;
+    UiPresetLoadPage ui_page_preset_load;
+
+    BaseUiPage* pages[num_ui_pages] = {
+        &ui_page_fx1,
+        &ui_page_fx2,
+        &ui_page_fx3,
+        &ui_page_fx4,
+        &ui_page_vco,
+        &ui_page_looper,
+        &ui_page_modulation,
+        &ui_page_voct,
+        &ui_page_volume,
+        &ui_page_preset_save,
+        &ui_page_preset_load,
+    };
+    BaseUiPage* current_page = &ui_page_fx1;
 };
 
 }

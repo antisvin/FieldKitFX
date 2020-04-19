@@ -20,7 +20,7 @@ void RoutingMatrix::init() {
     spiController.Instance = SPI1;
     spiController.Init.Mode = SPI_MODE_MASTER; // Master mode
     spiController.Init.BaudRatePrescaler =
-        SPI_BAUDRATEPRESCALER_32; // 32MHz/2 => 16.5Mbps
+        SPI_BAUDRATEPRESCALER_4; // Original code used prescaler = 32 which was much slower
     spiController.Init.Direction = SPI_DIRECTION_2LINES; // 2ways communication
     spiController.Init.DataSize = SPI_DATASIZE_8BIT; // 8 bit transmission
     spiController.Init.FirstBit = SPI_FIRSTBIT_MSB; // MSB first
@@ -94,8 +94,8 @@ void RoutingMatrix::updateButtonStates() {
 }
 
 void RoutingMatrix::updateCvDestinations() {
-    for(uint8_t i = 0; i < 11; i++) {
-        if(ba.isRisingEdge(i)) {
+    for (uint8_t i = 0; i < 11; i++) {
+        if (ba.isRisingEdge(i)) {
             router.cycleSource(i);
             // set the "has changed" bit (bit7)
             router.state[i] |= 0x80;
@@ -104,7 +104,7 @@ void RoutingMatrix::updateCvDestinations() {
             switchUpdateStartTime = HAL_GetTick();
         }
     }
-    if(switchUpdateFlag &&
+    if (switchUpdateFlag &&
         (HAL_GetTick() - switchUpdateStartTime > MATRIX_SWITCHUPDATE_DELAY)) {
         router.setSwitches();
         switchUpdateFlag = false;
@@ -115,11 +115,11 @@ void RoutingMatrix::syncLedsToDestinations() {
     /*
      * for each destination in the router's state register, associate the right color
      */
-    for(uint8_t i = 0; i < 11; i++) {
-        if(router.state[i] & 0x80) { // check if this state has changed
+    for (uint8_t i = 0; i < 11; i++) {
+        if (router.state[i] & 0x80) { // check if this state has changed
             // reset the "has changed" bit
             router.state[i] &= ~(0x80);
-            switch(router.state[i]) {
+            switch (router.state[i]) {
             case CV_SOURCE_REFERENCE:
                 la.setColor(i, colors[0][0], colors[0][1], colors[0][2]);
                 break;
@@ -144,8 +144,8 @@ void RoutingMatrix::forceSyncLedsToDestinations() {
     /*
      * for each destination in the router's state register, associate the right color
      */
-    for(uint8_t i = 0; i < 11; i++) {
-        switch(router.state[i]) {
+    for (uint8_t i = 0; i < 11; i++) {
+        switch (router.state[i]) {
         case CV_SOURCE_REFERENCE:
             la.setColor(i, colors[0][0], colors[0][1], colors[0][2]);
             break;

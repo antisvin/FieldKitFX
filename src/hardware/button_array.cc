@@ -71,11 +71,12 @@ void ButtonArray::checkCombinations() {
     /*
      * check for the calibration button combination
      */
-    if(isPressed(0) && isPressed(1) && isPressed(9) && isPressed(10)) {
-        if(++(longPressCounter) > BUTTON_ARRAY_LONG_PRESS) {
+    if (isPressed(0) && isPressed(1) && isPressed(9) && isPressed(10)) {
+        if (++(longPressCounter) > BUTTON_ARRAY_LONG_PRESS) {
             activeCombination = CALIBRATION_COMBINATION;
         }
-    } else {
+    }
+    else {
         longPressCounter = 0;
         activeCombination = NO_COMBINATION;
     }
@@ -90,6 +91,15 @@ uint16_t ButtonArray::getActiveCombination() {
     return activeCombination;
 }
 
+uint8_t ButtonArray::getFirstPressed() {
+    for (uint8_t i = 0; i < num_buttons; i++) {
+        if (activeCombination & (1 << i)) {
+            return i;
+        }
+    }
+    return 0xFF;
+}
+
 bool ButtonArray::isRisingEdge(uint8_t index) {
     return (!(previousState & (1 << index))) && (currentState & (1 << index));
 }
@@ -100,4 +110,9 @@ bool ButtonArray::isFallingEdge(uint8_t index) {
 bool ButtonArray::isPressed(uint8_t index) {
     return (previousState & (1 << index)) && (currentState & (1 << index));
 }
+
+bool ButtonArray::isPressed() {
+    return activeCombination;
+}
+
 }

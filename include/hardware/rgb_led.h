@@ -9,6 +9,7 @@
 /*
  * Include(s)
  */
+#include "hardware/colors.h"
 #include "hardware/led_driver.h"
 #include "utils/utils.h"
 
@@ -32,6 +33,7 @@ public:
     // RgbLed(LedDriver *driver, uint8_t baseAddress);
     RgbLed() = default;
     void setColor();
+    void setColor(Color color);
     void setColor(uint8_t red, uint8_t green, uint8_t blue);
     void setIntensity();
     void setIntensity(uint8_t intensity);
