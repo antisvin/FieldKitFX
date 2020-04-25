@@ -165,4 +165,16 @@ void RoutingMatrix::forceSyncLedsToDestinations() {
     }
 }
 
+void RoutingMatrix::setState(FxSelectorState state) {
+    switch (state) {
+    case FX_LOOPER:
+    case FX_FREQ_SHIFT:
+        router.switchTo(state);
+        forceSyncLedsToDestinations();
+        break;
+    default:
+        break;
+    }
+}
+
 }

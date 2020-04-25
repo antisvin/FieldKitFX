@@ -8,6 +8,7 @@
 
 #include "stm32f3xx_hal.h"
 #include "stm32f3xx_ll_spi.h"
+#include "hardware/fx_selector.h"
 #include "utils/utils.h"
 
 /*
@@ -26,12 +27,8 @@
 
 namespace fieldkitfx {
 class CvRouter {
-private:
-    SPI_HandleTypeDef* spi_controller;
-    DISALLOW_COPY_AND_ASSIGN(CvRouter);
-
 public:
-    uint8_t state[12];
+    uint8_t* state = routing_state;
 
     CvRouter() = default;
     void init(SPI_HandleTypeDef* spi);
@@ -40,6 +37,13 @@ public:
     void cycleSource(uint8_t dst);
     uint8_t getSource(uint8_t dst);
     void setSwitches();
+    void switchTo(FxSelectorState selector_state);
+
+private:
+    SPI_HandleTypeDef* spi_controller;
+    DISALLOW_COPY_AND_ASSIGN(CvRouter);
+    uint8_t routing_state[12];
+    uint8_t settings_state[12];
 };
 }
 #endif /* CVROUTER_H_ */

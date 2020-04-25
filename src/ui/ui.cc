@@ -12,8 +12,7 @@ namespace fieldkitfx {
  * Initialize all the parts necessary to control and process the UI.
  */
 
-void UI::init(Settings* settings_ptr) {
-    settings = settings_ptr;
+void UI::init() {
     cvMatrix.init();
     fxSelector.init();
     current_ui_state = UI_modeSwitches_update;
@@ -83,11 +82,13 @@ void UI::render() {
     case UI_loopButton_update:
         loopButton.updateStates();
         switch (fxSelector.justSwitchedTo()) {
-        case FX_FREQ_SHIFT:
-            renderSettingsInit();
-            break;
         case FX_LOOPER:
+            cvMatrix.setState(FX_LOOPER);
             looper.refreshUi = true;
+            break;
+        case FX_FREQ_SHIFT:
+            cvMatrix.setState(FX_FREQ_SHIFT);
+            renderSettingsInit();
             break;
         default:
             break;
@@ -140,6 +141,7 @@ void UI::render() {
 
 void UI::renderSettingsInit() {
     // Reset intensity to normal in case if it was blinking
+    loopButton.setColor(COL_NONE);
     loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
 
     for (uint8_t page = 0; page < num_ui_pages; page++) {
@@ -148,23 +150,13 @@ void UI::renderSettingsInit() {
     effects_library.refreshUi = true;
 }
 
-void UI::setBlinkState(bool blink_started) {
-    if (blink_started) {
-        blink_counter = 0;
-        loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
-    }
-    else {
-        loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
-    }
-}
-
 void UI::updateBlink() {
     switch (blink_counter++) {
     case 0:
-        loopButton.setIntensity(0);
+        current_page->blink();
         break;
     case 1 << 7:
-        loopButton.setIntensity(LOOPLED_NORMAL_INTENSITY);
+        current_page->renderState();
         break;
     default:
         break;
@@ -176,31 +168,36 @@ void UI::renderSettings() {
         last_pressed_button = cvMatrix.ba.getFirstPressed();
         if (last_pressed_button != (uint8_t)current_page_id) {
             // New page selected
+            // Render state once more in case if we were blinking
+            current_page->renderState();
+            // Switch to new page
             current_page_id = (UiPageId)last_pressed_button;
             current_page = pages[last_pressed_button];
             current_page->reset();
-            setBlinkState(true);
         }
         else {
             // Same page that was previously active is selected
             if (cvMatrix.ba.isRisingEdge(last_pressed_button)) {
-                setBlinkState(true);
+                current_page->onButtonPressed();
             }
-            else {
-                if (loopButton.checkRisingEdge()) {
-                    current_page->onLoopButtonPressed();
-                }
+            // Loop button pressed - switch pending state, but don't save yet
+            else if (loopButton.checkRisingEdge()) {
+                current_page->onLoopButtonPressed(false);
             }
         }
-        updateBlink();
     }
     else {
         if (cvMatrix.ba.isFallingEdge(last_pressed_button)) {
-            // Button got depressed. It needs some antidepressants to feel better!
-            setBlinkState(false);
+            // Button got depressed. It needs some antidepressants to feel
+            // better!
             current_page->onButtonDepressed();
         }
+        // Loop button pressed - store settings
+        if (loopButton.checkRisingEdge()) {
+            current_page->onLoopButtonPressed(true);
+        }
     }
+    updateBlink();
 
     /*
     if (loopButton.checkRisingEdge()) {

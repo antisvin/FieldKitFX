@@ -8,6 +8,7 @@
 
 #include "hardware/button_array.h"
 #include "hardware/cv_router.h"
+#include "hardware/fx_selector.h"
 #include "hardware/rgb_led_array.h"
 #include "utils/utils.h"
 
@@ -35,6 +36,7 @@ public:
     void updateCvDestinations();
     void syncLedsToDestinations();
     void forceSyncLedsToDestinations();
+    void setState(FxSelectorState state);
 };
 
 extern RoutingMatrix cvMatrix;

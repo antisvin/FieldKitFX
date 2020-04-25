@@ -69,11 +69,23 @@ enum UiStateCalibration {
     UI_renderMagnitude_Calibration
 };
 
+static UiFxPage ui_page_fx1(UI_FX1);
+static UiFxPage ui_page_fx2(UI_FX2);
+static UiFxPage ui_page_fx3(UI_FX3);
+static UiFxPage ui_page_fx4(UI_FX4);
+static UiVcoPage ui_page_vco(UI_VCO);
+static UiLooperPage ui_page_looper(UI_LOOPER);
+static UiModulationPage ui_page_modulation(UI_MODULATION);
+static UiVoctPage ui_page_voct(UI_VOCT);
+static UiVolumePage ui_page_volume(UI_VOLUME);
+static UiPresetSavePage ui_page_preset_save(UI_PRESET_SAVE);
+static UiPresetLoadPage ui_page_preset_load(UI_PRESET_LOAD);
+
 class UI {
 public:
     MagnitudeTracker magnitude_tracker;
     UI() {};
-    void init(Settings* settings);
+    void init();
     void render();
     void initCalibration();
     void renderCalibration();
@@ -89,7 +101,6 @@ private:
     UiState current_ui_state;
     UiStateCalibration current_ui_state_calibration;
     TIM_HandleTypeDef UITimer;
-    Settings* settings;
     uint8_t blink_counter;
     uint8_t last_pressed_button;
     bool matrixRefreshFlag;
@@ -99,17 +110,6 @@ private:
     void updateBlink();
 
     UiPageId current_page_id;
-    UiFxPage ui_page_fx1;
-    UiFxPage ui_page_fx2;
-    UiFxPage ui_page_fx3;
-    UiFxPage ui_page_fx4;
-    UiVcoPage ui_page_vco;
-    UiLooperPage ui_page_looper;
-    UiModulationPage ui_page_modulation;
-    UiVoctPage ui_page_voct;
-    UiVolumePage ui_page_volume;
-    UiPresetSavePage ui_page_preset_save;
-    UiPresetLoadPage ui_page_preset_load;
 
     BaseUiPage* pages[num_ui_pages] = {
         &ui_page_fx1,

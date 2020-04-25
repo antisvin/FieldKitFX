@@ -25,7 +25,10 @@ namespace fieldkitfx {
 // void UiVoctPage::render() {
 //}
 
-void UiVoctPage::onLoopButtonPressed() {
+void UiVoctPage::onLoopButtonPressed(bool shouldSave) {
+}
+
+void UiVoctPage::onButtonPressed() {
 }
 
 void UiVoctPage::onButtonDepressed() {
@@ -37,7 +40,10 @@ void UiVoctPage::onButtonDepressed() {
 // void UiVolumePage::render() {
 //}
 
-void UiVolumePage::onLoopButtonPressed() {
+void UiVolumePage::onLoopButtonPressed(bool shouldSave) {
+}
+
+void UiVolumePage::onButtonPressed() {
 }
 
 void UiVolumePage::onButtonDepressed() {

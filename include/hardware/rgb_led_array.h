@@ -36,6 +36,8 @@ public:
 
     RgbLedArray() = default;
     void init(LedDriver* driver1, LedDriver* driver2);
+    void setColor(Color color);
+    void setColor(uint8_t index, Color color);
     void setColor(uint8_t red, uint8_t green, uint8_t blue);
     void setColor(uint8_t index, uint8_t red, uint8_t green, uint8_t blue);
     void setIntensity(uint8_t intensity);

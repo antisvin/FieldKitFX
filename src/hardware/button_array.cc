@@ -93,7 +93,7 @@ uint16_t ButtonArray::getActiveCombination() {
 
 uint8_t ButtonArray::getFirstPressed() {
     for (uint8_t i = 0; i < num_buttons; i++) {
-        if (activeCombination & (1 << i)) {
+        if (currentState & (1 << i)) {
             return i;
         }
     }
@@ -112,7 +112,7 @@ bool ButtonArray::isPressed(uint8_t index) {
 }
 
 bool ButtonArray::isPressed() {
-    return activeCombination;
+    return currentState > 0;
 }
 
 }

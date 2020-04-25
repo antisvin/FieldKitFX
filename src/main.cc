@@ -23,7 +23,6 @@
 
 using namespace fieldkitfx;
 
-Settings settings;
 UI ui;
 
 int main(void) {
@@ -85,7 +84,7 @@ int main(void) {
     /*
      * UI Init
      */
-    ui.init(&settings);
+    ui.init();
 
     // cvMatrix.forceSyncLedsToDestinations();
 

@@ -63,7 +63,7 @@ void CvRouter::setSwitches() {
 }
 
 void CvRouter::disableAllRoutings(void) {
-    for(uint8_t i = 0; i < 11; i++) {
+    for (uint8_t i = 0; i < 11; i++) {
         state[i] = CV_SOURCE_REFERENCE;
     }
     setSwitches();
@@ -75,7 +75,7 @@ void CvRouter::setDestination(uint8_t src, uint8_t dst) {
 }
 
 void CvRouter::cycleSource(uint8_t dst) {
-    switch(state[dst]) {
+    switch (state[dst]) {
     case CV_SOURCE_REFERENCE:
         state[dst] = CV_SOURCE_1;
         break;
@@ -95,7 +95,7 @@ void CvRouter::cycleSource(uint8_t dst) {
 }
 
 uint8_t CvRouter::getSource(uint8_t dst) {
-    switch(state[dst]) {
+    switch (state[dst]) {
     case CV_SOURCE_1:
         return 1;
     case CV_SOURCE_2:
@@ -108,4 +108,14 @@ uint8_t CvRouter::getSource(uint8_t dst) {
         return 0;
     }
 }
+
+void CvRouter::switchTo(FxSelectorState selector_state) {
+    if (selector_state == FX_LOOPER) {
+        state = routing_state;
+    }
+    else {
+        state = settings_state;
+    }
+}
+
 }

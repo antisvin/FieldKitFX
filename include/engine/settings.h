@@ -48,10 +48,15 @@ struct CodecSettingsData {
     uint8_t out_gain;
 };
 
+struct GeneralSettingsData {
+    uint8_t last_preset_id;
+};
+
 struct PersistentData {
     ChannelCalibrationData input_calibration_data;
     PresetData presets[num_presets];
     CodecSettingsData codec_settings_data;
+    GeneralSettingsData general_settings_data;
     uint8_t padding[16];
     enum { tag = 0x494C4143 }; // CALI
 };
@@ -100,6 +105,14 @@ public:
         return &persistent_data_.codec_settings_data;
     }
 
+    inline const GeneralSettingsData& general_settings_data() const {
+        return persistent_data_.general_settings_data;
+    }
+
+    inline GeneralSettingsData* mutable_general_settings_data() {
+        return &persistent_data_.general_settings_data;
+    }
+
     inline const State& state() const {
         return state_;
     }
@@ -114,6 +127,7 @@ public:
 
     void storePreset(uint8_t preset_id) {
         persistent_data_.presets[preset_id] = current_preset;
+        persistent_data_.general_settings_data.last_preset_id = preset_id;
         SavePersistentData();
     }
 
@@ -125,6 +139,8 @@ private:
 
     DISALLOW_COPY_AND_ASSIGN(Settings);
 };
+
+extern Settings settings;
 
 }
 

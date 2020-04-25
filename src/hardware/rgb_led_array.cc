@@ -10,18 +10,7 @@ constexpr uint8_t LEDBaseAddrLUT[RGBLEDARRAY_SIZE] = { 0x0e, 0x12, 0x1f, 0x1b,
     0x17, 0x0a, 0x0e, 0x12, 0x17, 0x1b, 0x1f };
 
 void RgbLedArray::init(LedDriver* driver1, LedDriver* driver2) {
-    for(uint8_t i = 0; i < RGBLEDARRAY_SIZE; i++) {
-        /*
-         * Init the RGBLED struct
-         */
-        /*
-        if(i < 5) {	//LEDs 1 to 6 are attached to the first LED driver (U54)
-            array[i] = RgbLed(driver1, LEDBaseAddrLUT[i]);
-        }
-        else {
-            array[i] = RgbLed(driver2, LEDBaseAddrLUT[i]);
-        }
-        */
+    for (uint8_t i = 0; i < RGBLEDARRAY_SIZE; i++) {
         array[i].driver = i < 5 ? driver1 : driver2;
         array[i].baseAddress = LEDBaseAddrLUT[i];
         array[i].intensity = CV_RGB_LED_INTENSITY;
@@ -30,8 +19,16 @@ void RgbLedArray::init(LedDriver* driver1, LedDriver* driver2) {
     }
 }
 
+void RgbLedArray::setColor(uint8_t index, Color color) {
+    setColor(index, colors[color][0], colors[color][1], colors[color][2]);
+}
+
+void RgbLedArray::setColor(Color color) {
+    setColor(colors[color][0], colors[color][1], colors[color][2]);
+}
+
 void RgbLedArray::setColor(uint8_t red, uint8_t green, uint8_t blue) {
-    for(uint8_t i = 0; i < RGBLEDARRAY_SIZE; i++) {
+    for (uint8_t i = 0; i < RGBLEDARRAY_SIZE; i++) {
         setColor(i, red, green, blue);
     }
 }
@@ -44,7 +41,7 @@ void RgbLedArray::setColor(uint8_t index, uint8_t red, uint8_t green, uint8_t bl
 }
 
 void RgbLedArray::setIntensity(uint8_t intensity) {
-    for(uint8_t i = 0; i < RGBLEDARRAY_SIZE; i++) {
+    for (uint8_t i = 0; i < RGBLEDARRAY_SIZE; i++) {
         setIntensity(i, intensity);
     }
 }
