@@ -93,6 +93,7 @@ public:
 
     void fromSettings() override {
         pending_state = (Color)settings.current_preset.fx_state[page_id].engine;
+        last_state = pending_state;
         cvMatrix.la.array[page_id].setColor(pending_state);
     }
 
@@ -108,6 +109,7 @@ public:
 
     void fromSettings() override {
         pending_state = (Color)settings.current_preset.vco_state.engine;
+        last_state = pending_state;
         cvMatrix.la.array[page_id].setColor(pending_state);
     }
 
@@ -123,6 +125,7 @@ public:
 
     void fromSettings() override {
         pending_state = (Color)settings.current_preset.looper_state.engine;
+        last_state = pending_state;
         cvMatrix.la.array[page_id].setColor(pending_state);
     }
 
@@ -138,6 +141,7 @@ public:
 
     void fromSettings() override {
         pending_state = (Color)settings.current_preset.mod_state.engine;
+        last_state = pending_state;
         cvMatrix.la.array[page_id].setColor(pending_state);
     }
 
@@ -207,6 +211,7 @@ public:
 
     void fromSettings() override {
         pending_state = (Color)last_saved_preset_id;
+        last_state = pending_state;
         cvMatrix.la.array[page_id].setColor(pending_state);
     }
 
@@ -230,6 +235,7 @@ public:
 
     void fromSettings() override {
         pending_state = (Color)last_loaded_preset_id;
+        last_state = pending_state;
         cvMatrix.la.array[page_id].setColor(pending_state);
     }
 
