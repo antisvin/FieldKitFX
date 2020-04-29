@@ -1,4 +1,5 @@
 #include "ui/page.h"
+#include "engine/engine.h"
 
 namespace fieldkitfx {
 
@@ -25,14 +26,13 @@ namespace fieldkitfx {
 // void UiVoctPage::render() {
 //}
 
-void UiVoctPage::onLoopButtonPressed(bool shouldSave) {
-}
-
+/*
 void UiVoctPage::onButtonPressed() {
 }
 
 void UiVoctPage::onButtonDepressed() {
 }
+*/
 
 // void UiVolumePage::syncState() {
 //}
@@ -47,6 +47,16 @@ void UiVolumePage::onButtonPressed() {
 }
 
 void UiVolumePage::onButtonDepressed() {
+}
+
+void UiPresetRandomPage::onLoopButtonPressed(bool shouldSave) {
+    // Choose random VCF
+    // Chose random FX1-4
+    // VCF and effects correlate - enabling one should reduce probability
+    // that next effect is also enabledd - and vice versa
+    // Choose parameters for all enabled VCF/FX
+    // Choose looper type
+    // Choose modulator
 }
 
 /*

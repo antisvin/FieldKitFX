@@ -69,15 +69,15 @@ enum UiStateCalibration {
     UI_renderMagnitude_Calibration
 };
 
+static UiVcfPage ui_page_vcf(UI_VCF);
 static UiFxPage ui_page_fx1(UI_FX1);
 static UiFxPage ui_page_fx2(UI_FX2);
 static UiFxPage ui_page_fx3(UI_FX3);
 static UiFxPage ui_page_fx4(UI_FX4);
-static UiVcoPage ui_page_vco(UI_VCO);
 static UiLooperPage ui_page_looper(UI_LOOPER);
 static UiModulationPage ui_page_modulation(UI_MODULATION);
-static UiVoctPage ui_page_voct(UI_VOCT);
 static UiVolumePage ui_page_volume(UI_VOLUME);
+static UiPresetRandomPage ui_page_preset_random(UI_PRESET_RANDOM);
 static UiPresetSavePage ui_page_preset_save(UI_PRESET_SAVE);
 static UiPresetLoadPage ui_page_preset_load(UI_PRESET_LOAD);
 
@@ -92,10 +92,6 @@ public:
     void renderMagnitudeInit();
     void renderMagnitude(float magnitude);
     void renderSettingsInit();
-
-    bool pauseAudio() {
-        return current_page_id == UI_VOCT;
-    }
 
 private:
     UiState current_ui_state;
@@ -112,15 +108,15 @@ private:
     UiPageId current_page_id;
 
     BaseUiPage* pages[num_ui_pages] = {
+        &ui_page_vcf,
         &ui_page_fx1,
         &ui_page_fx2,
         &ui_page_fx3,
         &ui_page_fx4,
-        &ui_page_vco,
         &ui_page_looper,
         &ui_page_modulation,
-        &ui_page_voct,
         &ui_page_volume,
+        &ui_page_preset_random,
         &ui_page_preset_save,
         &ui_page_preset_load,
     };

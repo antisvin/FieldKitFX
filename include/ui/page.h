@@ -12,15 +12,15 @@ namespace fieldkitfx {
 constexpr uint8_t num_ui_pages = 11U;
 
 enum UiPageId {
+    UI_VCF,
     UI_FX1,
     UI_FX2,
     UI_FX3,
     UI_FX4,
-    UI_VCO,
     UI_LOOPER,
     UI_MODULATION,
-    UI_VOCT,
     UI_VOLUME,
+    UI_PRESET_RANDOM,
     UI_PRESET_SAVE,
     UI_PRESET_LOAD,
 };
@@ -86,6 +86,22 @@ public:
     };
 };
 
+class UiVcfPage : public StatefulUiPage<COL_BLUE> {
+public:
+    UiVcfPage(UiPageId page_id)
+        : StatefulUiPage<COL_BLUE>(page_id) {};
+
+    void fromSettings() override {
+        pending_state = (Color)settings.current_preset.vcf_state.engine;
+        last_state = pending_state;
+        cvMatrix.la.array[page_id].setColor(pending_state);
+    }
+
+    void toSettings() override {
+        settings.current_preset.vcf_state.engine = (uint8_t)pending_state;
+    }
+};
+
 class UiFxPage : public StatefulUiPage<COL_RED> {
 public:
     UiFxPage(UiPageId page_id)
@@ -99,22 +115,6 @@ public:
 
     void toSettings() override {
         settings.current_preset.fx_state[page_id].engine = (uint8_t)pending_state;
-    }
-};
-
-class UiVcoPage : public StatefulUiPage<COL_BLUE> {
-public:
-    UiVcoPage(UiPageId page_id)
-        : StatefulUiPage<COL_BLUE>(page_id) {};
-
-    void fromSettings() override {
-        pending_state = (Color)settings.current_preset.vco_state.engine;
-        last_state = pending_state;
-        cvMatrix.la.array[page_id].setColor(pending_state);
-    }
-
-    void toSettings() override {
-        settings.current_preset.vco_state.engine = (uint8_t)pending_state;
     }
 };
 
@@ -150,33 +150,6 @@ public:
     }
 };
 
-class UiVoctPage : public BaseUiPage {
-public:
-    UiVoctPage(UiPageId page_id)
-        : BaseUiPage(page_id) {};
-
-    void fromSettings() override {
-        // Looks like this function shouldn't do anything - cal data is
-        // write-only in this menu.
-    }
-
-    void toSettings() override {
-        // TODO: UPDATE VCO STATE
-        auto cal_data = settings.mutable_calibration_data();
-        // TODO set cal_data properties from calibrator
-        settings.SavePersistentData();
-
-        // cal_data->offset = calibrator.getOffset();
-        // cal_data->scale = calibrator.getScale();
-    }
-
-    // void nextState();
-    // void render() override;
-    void onLoopButtonPressed(bool shouldSave) override;
-    void onButtonPressed() override;
-    void onButtonDepressed() override;
-};
-
 class UiVolumePage : public BaseUiPage {
 public:
     UiVolumePage(UiPageId page_id)
@@ -202,6 +175,22 @@ public:
 
 private:
     uint16_t in_gain, out_gain;
+};
+
+class UiPresetRandomPage : public BaseUiPage {
+public:
+    UiPresetRandomPage(UiPageId page_id)
+        : BaseUiPage(page_id) {};
+
+    void fromSettings() override {
+    }
+
+    void toSettings() override {
+    }
+
+    void onLoopButtonPressed(bool shouldSave) override;
+    void onButtonPressed() override {};
+    void onButtonDepressed() override {};
 };
 
 class UiPresetSavePage : public StatefulUiPage<COL_ORANGE> {

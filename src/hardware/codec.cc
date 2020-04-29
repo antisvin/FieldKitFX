@@ -65,7 +65,7 @@ void codec_ConfigAudioInterface() {
     hdma_i2s_rx.Init.Mode = DMA_CIRCULAR;
     hdma_i2s_rx.Init.Priority = DMA_PRIORITY_HIGH;
 
-    if(HAL_DMA_Init(&hdma_i2s_rx) != HAL_OK)
+    if (HAL_DMA_Init(&hdma_i2s_rx) != HAL_OK)
         __asm("bkpt");
 
     __HAL_LINKDMA(&I2SHandle, hdmarx, hdma_i2s_rx);
@@ -86,7 +86,7 @@ void codec_ConfigAudioInterface() {
     hdma_i2s_tx.Init.Mode = DMA_CIRCULAR;
     hdma_i2s_tx.Init.Priority = DMA_PRIORITY_HIGH;
 
-    if(HAL_DMA_Init(&hdma_i2s_tx) != HAL_OK)
+    if (HAL_DMA_Init(&hdma_i2s_tx) != HAL_OK)
         __asm("bkpt");
 
     __HAL_LINKDMA(&I2SHandle, hdmatx, hdma_i2s_tx);
@@ -95,7 +95,7 @@ void codec_ConfigAudioInterface() {
     HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(DMA1_Channel5_IRQn);
 
-    if(HAL_I2S_Init(&I2SHandle) != HAL_OK) {
+    if (HAL_I2S_Init(&I2SHandle) != HAL_OK) {
         __asm("bkpt");
     }
 }
@@ -126,15 +126,15 @@ void codec_start() {
      */
     codec_writeRegister(CODEC_REG_ACTIVE, 0x01);
 
-    while(HAL_GPIO_ReadPin(CODEC_GPIO, CODEC_I2S_LRCLK))
+    while (HAL_GPIO_ReadPin(CODEC_GPIO, CODEC_I2S_LRCLK))
         ;
-    while(!HAL_GPIO_ReadPin(CODEC_GPIO, CODEC_I2S_LRCLK))
+    while (!HAL_GPIO_ReadPin(CODEC_GPIO, CODEC_I2S_LRCLK))
         ;
 
-    if(HAL_I2SEx_TransmitReceive_DMA(&I2SHandle,
-           reinterpret_cast<uint16_t*>(audio_output_buffer),
-           reinterpret_cast<uint16_t*>(audio_input_buffer),
-           AUDIO_IO_BUFFER_SIZE) != HAL_OK) {
+    if (HAL_I2SEx_TransmitReceive_DMA(&I2SHandle,
+            reinterpret_cast<uint16_t*>(audio_output_buffer),
+            reinterpret_cast<uint16_t*>(audio_input_buffer),
+            AUDIO_IO_BUFFER_SIZE) != HAL_OK) {
         __asm("bkpt");
     }
 
@@ -169,9 +169,9 @@ void codec_resume() {
      */
     codec_writeRegister(CODEC_REG_ACTIVE, 0x01);
 
-    while(HAL_GPIO_ReadPin(CODEC_GPIO, CODEC_I2S_LRCLK))
+    while (HAL_GPIO_ReadPin(CODEC_GPIO, CODEC_I2S_LRCLK))
         ;
-    while(!HAL_GPIO_ReadPin(CODEC_GPIO, CODEC_I2S_LRCLK))
+    while (!HAL_GPIO_ReadPin(CODEC_GPIO, CODEC_I2S_LRCLK))
         ;
 
     /*
@@ -199,7 +199,7 @@ extern "C" void i2s_Xfr_halfCplt_RX(DMA_HandleTypeDef* hdma) {
      * The DMA controller is now filling the second half of the DMA buffer, we can safely read the contents of the first half
      * and push them in the rin_ringbuffer
      */
-    for(uint8_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
+    for (uint8_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
         user_audio_in_buffer.buffer[i] =
             scale_int16_to_float(audio_input_buffer[2 * i]);
         // ditch the RIGHT channel
@@ -212,7 +212,7 @@ extern "C" void i2s_Xfr_cplt_RX(DMA_HandleTypeDef* hdma) {
      * The DMA controller is now filling the first half of the DMA buffer, we can safely read the contents of the second half
      * and push them in the user in buffer
      */
-    for(uint8_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
+    for (uint8_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
         user_audio_in_buffer.buffer[i] = scale_int16_to_float(
             audio_input_buffer[USER_AUDIO_IO_BUFFER_SIZE * 2 + 2 * i]);
         // ditch the RIGHT channel
@@ -226,10 +226,10 @@ extern "C" void i2s_Xfr_halfCplt_TX(DMA_HandleTypeDef* hdma) {
      * to the first half of the DMA buffer
      */
     // check for sample drops
-    if(!user_audio_out_buffer.isFull()) {
+    if (!user_audio_out_buffer.isFull()) {
         sampleDropCallback();
     }
-    for(uint8_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
+    for (uint8_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
         audio_output_buffer[2 * i] =
             scale_float_to_int16(user_audio_out_buffer.buffer[i]);
         // audio_output_buffer[2*i+1] = 0;	//we don't use the RIGHT channel
@@ -243,10 +243,10 @@ extern "C" void i2s_Xfr_cplt_TX(DMA_HandleTypeDef* hdma) {
      * to the second half of the DMA buffer
      */
     // check for sample drops
-    if(!user_audio_out_buffer.isFull()) {
+    if (!user_audio_out_buffer.isFull()) {
         sampleDropCallback();
     }
-    for(uint8_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
+    for (uint8_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
         audio_output_buffer[USER_AUDIO_IO_BUFFER_SIZE * 2 + 2 * i] =
             scale_float_to_int16(user_audio_out_buffer.buffer[i]);
         // audio_output_buffer[(AUDIO_IO_BUFFER_SIZE/2) + (2*i+1)] = 0;	//we don't use the RIGHT channel
@@ -259,8 +259,8 @@ void codec_writeRegister(uint8_t regAddr, uint16_t data) {
     temp[0] = ((regAddr << 1) & 0xfe) | ((data >> 8) & 0x01);
     temp[1] = data;
 
-    if(HAL_I2C_Master_Transmit(&I2c2Handle, (uint16_t)(CODEC_ADDRESS << 1),
-           temp, 2, I2C_TIMEOUT_VAL) != HAL_OK)
+    if (HAL_I2C_Master_Transmit(&I2c2Handle, (uint16_t)(CODEC_ADDRESS << 1),
+            temp, 2, I2C_TIMEOUT_VAL) != HAL_OK)
         __asm("bkpt");
 }
 
@@ -270,7 +270,7 @@ void codec_writeRegisterBruteForce(uint8_t regAddr, uint16_t data) {
     temp[1] = data;
     HAL_I2C_Master_Transmit(
         &I2c2Handle, (uint16_t)(CODEC_ADDRESS << 1), temp, 2, I2C_TIMEOUT_VAL);
-    while(HAL_I2C_GetState(&I2c2Handle) != HAL_I2C_STATE_READY) { }
+    while (HAL_I2C_GetState(&I2c2Handle) != HAL_I2C_STATE_READY) { }
 }
 
 void codec_ConfigCodec_48K() {
@@ -314,7 +314,7 @@ void codec_setInputGain(uint8_t channel, uint16_t amplification) {
     static uint32_t previous_time = 0;
     static uint32_t time = 0;
     time = HAL_GetTick();
-    if((value != (amplification & 0x1F)) && (time - previous_time > 100)) {
+    if ((value != (amplification & 0x1F)) && (time - previous_time > 100)) {
         previous_time = time;
         write_counter++;
         // limit to 5bits

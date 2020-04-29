@@ -8,39 +8,21 @@ namespace fieldkitfx {
 
 constexpr size_t num_presets = 4;
 
-struct ChannelCalibrationData {
-    float offset;
-    float scale;
-    inline float transform(float x) const {
-        return x * scale + offset;
-    }
-};
-
-struct FxData {
+struct Slot2Data {
     uint8_t engine;
     uint16_t params[2];
 };
 
-struct VcoData {
-    uint8_t engine;
-    uint16_t params[2];
-};
-
-struct LooperData {
-    uint8_t engine;
-    uint16_t params[4];
-};
-
-struct ModulationData {
+struct Slot4Data {
     uint8_t engine;
     uint16_t params[4];
 };
 
 struct PresetData {
-    FxData fx_state[4];
-    VcoData vco_state;
-    LooperData looper_state;
-    ModulationData mod_state;
+    Slot2Data vcf_state;
+    Slot2Data fx_state[4];
+    Slot4Data looper_state;
+    Slot4Data mod_state;
 };
 
 struct CodecSettingsData {
@@ -53,7 +35,6 @@ struct GeneralSettingsData {
 };
 
 struct PersistentData {
-    ChannelCalibrationData input_calibration_data;
     PresetData presets[num_presets];
     CodecSettingsData codec_settings_data;
     GeneralSettingsData general_settings_data;
@@ -80,14 +61,6 @@ public:
 
     void SavePersistentData();
     void SaveState();
-
-    inline const ChannelCalibrationData& calibration_data() const {
-        return persistent_data_.input_calibration_data;
-    }
-
-    inline ChannelCalibrationData* mutable_calibration_data() {
-        return &persistent_data_.input_calibration_data;
-    }
 
     inline const PresetData& preset_data(size_t position) const {
         return persistent_data_.presets[position];
