@@ -26,12 +26,12 @@ public:
     }
 
     void updateParams(const DspParam* param1, const DspParam* param2) {
-        delay = param1->asFloat() / ADC_RESOLUTION_DEZ * (shared_buffer_size - 1);
+        delay = param1->asFloat() / ADC_RESOLUTION_DEZ * (large_buffer_size - 1);
         feedback = param2->asFloat() / ADC_RESOLUTION_DEZ;
     }
 
 private:
-    DelayLine<float, shared_buffer_size> delay_line;
+    DelayLine<float, large_buffer_size> delay_line;
     DISALLOW_COPY_AND_ASSIGN(AllpassFilterEffect);
 };
 

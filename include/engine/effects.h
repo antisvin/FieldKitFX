@@ -57,30 +57,52 @@ public:
     }
 };
 
+class EffectsLibrarySmallMemory : public EffectsLibraryBase, public SharedBuffer<16> {
+public:
+    EffectsLibrarySmallMemory() {
+        effects[0] = &bypass;
+        effects[1] = &frequency_shifter;
+        effects[2] = &phaser;
+        effects[3] = &distfolder;
+        effects[4] = &decimator;
+        SharedBuffer<16>::initBuffer<DspEffect>(effects);
+    }
+
+private:
+    BypassEffect bypass;
+    FrequencyShifterEffect frequency_shifter;
+    PhaserEffect phaser;
+    DistFolderEffect distfolder;
+    DecimatorEffect decimator;
+
+    DISALLOW_COPY_AND_ASSIGN(EffectsLibrarySmallMemory);
+};
+
 class EffectsLibraryLargeMemory : public EffectsLibraryBase,
                                   public SharedBuffer<2048> {
 public:
     EffectsLibraryLargeMemory() {
-        algo = (EffectAlgo)(1);
         effects[0] = &bypass;
         effects[1] = &barberpole_phaser;
         effects[2] = &tz_flanger;
-        effects[3] = &phaser;
+        effects[3] = &comb;
         effects[4] = &chorus;
-        SharedBuffer<shared_buffer_size>::initBuffer<DspEffect>(effects);
+        SharedBuffer<2048>::initBuffer<DspEffect>(effects);
     };
 
 private:
     BypassEffect bypass;
     BarberpolePhaserEffect barberpole_phaser;
     TzFlangerEffect tz_flanger;
-    PhaserEffect phaser;
+    CombFilterEffect comb;
     ChorusEffect chorus;
 
     DISALLOW_COPY_AND_ASSIGN(EffectsLibraryLargeMemory);
 };
 
+extern EffectsLibrarySmallMemory effects_library1;
 extern EffectsLibraryLargeMemory effects_library2;
+extern EffectsLibrarySmallMemory effects_library3;
 extern EffectsLibraryLargeMemory effects_library4;
 }
 

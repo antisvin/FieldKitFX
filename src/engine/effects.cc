@@ -2,7 +2,9 @@
 
 namespace fieldkitfx {
 
+EffectsLibrarySmallMemory effects_library1;
 EffectsLibraryLargeMemory effects_library2;
+EffectsLibrarySmallMemory effects_library3;
 EffectsLibraryLargeMemory effects_library4;
 
 /*

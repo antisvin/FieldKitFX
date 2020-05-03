@@ -40,13 +40,13 @@ public:
         delay_line.Reset();
     }
 
-    void updateParams(DspParam* param1, DspParam* param2) {
-        delay = param1->asFloat() / ADC_RESOLUTION_DEZ * (shared_buffer_size - 1.0f);
+    void updateParams(const DspParam* param1, const DspParam* param2) {
+        delay = param1->asFloat() / ADC_RESOLUTION_DEZ * (large_buffer_size - 1.0f);
         feedback = (param2->asFloat() * 2) / ADC_RESOLUTION_DEZ - 1.0f;
     }
 
 private:
-    DelayLine<float, shared_buffer_size> delay_line;
+    DelayLine<float, large_buffer_size> delay_line;
     DISALLOW_COPY_AND_ASSIGN(CombFilterEffect);
 };
 

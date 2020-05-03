@@ -147,7 +147,9 @@ void UI::renderSettingsInit() {
     for (uint8_t page = 0; page < num_ui_pages; page++) {
         pages[page]->reset();
     }
+    effects_library1.refreshUi = true;
     effects_library2.refreshUi = true;
+    effects_library3.refreshUi = true;
     effects_library4.refreshUi = true;
 }
 
@@ -199,45 +201,6 @@ void UI::renderSettings() {
         }
     }
     updateBlink();
-
-    /*
-    if (loopButton.checkRisingEdge()) {
-        effects_library.refreshUi = true;
-        effects_library.nextEffect();
-    }
-    switch (effects_library.algo) {
-    case DSP_BYPASS:
-        if (effects_library.refreshUi) {
-            loopButton.setColor(COL_NONE);
-        }
-        break;
-    case DSP_BARBERPOLE_PHASER:
-        if (effects_library.refreshUi) {
-            loopButton.setColor(COL_BLUE);
-        }
-        break;
-    case DSP_TZ_FLANGER:
-        if (effects_library.refreshUi) {
-            loopButton.setColor(COL_PINK);
-        }
-        break;
-    case DSP_PHASER:
-        if (effects_library.refreshUi) {
-            loopButton.setColor(COL_GREEN);
-        }
-        break;
-    case DSP_CHORUS:
-        if (effects_library.refreshUi) {
-            loopButton.setColor(COL_ORANGE);
-        }
-        break;
-    case DSP_DECIMATOR:
-        if (effects_library.refreshUi) {
-            loopButton.setColor(COL_RED);
-        }
-        break;
-    }
-    */
 }
 
 void UI::renderLooper() {

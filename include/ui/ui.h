@@ -70,9 +70,9 @@ enum UiStateCalibration {
 };
 
 static UiVcfPage ui_page_vcf(UI_VCF);
-static UiFxPage ui_page_fx1(UI_FX1);
+static UiFxPage ui_page_fx1(UI_FX1, &effects_library1);
 static UiFxPage ui_page_fx2(UI_FX2, &effects_library2);
-static UiFxPage ui_page_fx3(UI_FX3);
+static UiFxPage ui_page_fx3(UI_FX3, &effects_library3);
 static UiFxPage ui_page_fx4(UI_FX4, &effects_library4);
 static UiLooperPage ui_page_looper(UI_LOOPER);
 static UiModulationPage ui_page_modulation(UI_MODULATION);
@@ -120,7 +120,7 @@ private:
         &ui_page_preset_save,
         &ui_page_preset_load,
     };
-    BaseUiPage* current_page = &ui_page_fx1;
+    BaseUiPage* current_page = &ui_page_vcf;
 };
 
 }

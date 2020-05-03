@@ -11,7 +11,8 @@
 namespace fieldkitfx {
 
 constexpr size_t dsp_filter_size = 8;
-constexpr size_t shared_buffer_size = 2048;
+constexpr size_t large_buffer_size = 2048;
+constexpr size_t small_buffer_size = 16;
 using DspParam = MovingAverageFilter<uint32_t, dsp_filter_size>;
 
 class DspEffect {
