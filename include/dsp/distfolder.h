@@ -27,7 +27,7 @@ public:
         }
     };
 
-    void updateParams(DspParam* param1, DspParam* param2) {
+    void updateParams(const DspParam* param1, const DspParam* param2) {
         // offset = param1->asFloat() / 4095.0;
         depth = param1->asFloat() / ADC_RESOLUTION_DEZ;
         /*

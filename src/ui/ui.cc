@@ -147,7 +147,8 @@ void UI::renderSettingsInit() {
     for (uint8_t page = 0; page < num_ui_pages; page++) {
         pages[page]->reset();
     }
-    effects_library.refreshUi = true;
+    effects_library2.refreshUi = true;
+    effects_library4.refreshUi = true;
 }
 
 void UI::updateBlink() {

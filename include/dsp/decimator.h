@@ -57,7 +57,7 @@ public:
         }
     }
 
-    void updateParams(DspParam* param1, DspParam* param2) {
+    void updateParams(const DspParam* param1, const DspParam* param2) {
         decimation_factor = param1->asFloat() * 6 / 4095.0;
         bit_reduction =
             (logLUT_12bit[param2->last_result & 0xfff] * (16.0 - min_bitdepth)) / 4095.0;

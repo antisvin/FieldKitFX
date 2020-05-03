@@ -45,7 +45,7 @@ public:
         return last_result;
     }
 
-    float asFloat() {
+    float asFloat() const {
         return (float)sum / length;
     }
 };

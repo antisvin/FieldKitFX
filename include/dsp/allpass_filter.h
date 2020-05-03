@@ -25,7 +25,7 @@ public:
         delay_line.Reset();
     }
 
-    void updateParams(DspParam* param1, DspParam* param2) {
+    void updateParams(const DspParam* param1, const DspParam* param2) {
         delay = param1->asFloat() / ADC_RESOLUTION_DEZ * (shared_buffer_size - 1);
         feedback = param2->asFloat() / ADC_RESOLUTION_DEZ;
     }

@@ -2,6 +2,7 @@
 #define _UI_PAGE_H_
 
 #include "engine/settings.h"
+#include "engine/effects.h"
 #include "hardware/colors.h"
 #include "hardware/loop_button.h"
 #include "hardware/rgb_led.h"
@@ -102,20 +103,31 @@ public:
     }
 };
 
-class UiFxPage : public StatefulUiPage<COL_RED> {
+class UiFxPage : public StatefulUiPage<COL_ORANGE> {
 public:
     UiFxPage(UiPageId page_id)
-        : StatefulUiPage<COL_RED>(page_id) {};
+        : StatefulUiPage<COL_ORANGE>(page_id)
+        , effects_library(nullptr) {};
+
+    UiFxPage(UiPageId page_id, EffectsLibraryBase* effects_library)
+        : StatefulUiPage<COL_ORANGE>(page_id)
+        , effects_library(effects_library) {};
 
     void fromSettings() override {
-        pending_state = (Color)settings.current_preset.fx_state[page_id].engine;
+        pending_state = (Color)settings.current_preset.fx_state[page_id - 1].engine;
         last_state = pending_state;
         cvMatrix.la.array[page_id].setColor(pending_state);
     }
 
     void toSettings() override {
-        settings.current_preset.fx_state[page_id].engine = (uint8_t)pending_state;
+        settings.current_preset.fx_state[page_id - 1].engine = (uint8_t)pending_state;
+        if (effects_library != nullptr) {
+            effects_library->setAlgo((uint8_t)pending_state);
+        }
     }
+
+private:
+    EffectsLibraryBase* effects_library;
 };
 
 class UiLooperPage : public StatefulUiPage<COL_PINK> {

@@ -41,51 +41,47 @@ public:
     }
 };
 
-class EffectsLibrary : public SharedBuffer<shared_buffer_size> {
+class EffectsLibraryBase {
 public:
+    static constexpr uint8_t num_effects = 5;
+    DspEffect* effects[num_effects];
     EffectAlgo algo;
     bool refreshUi = true;
-    // float shared_buffer[shared_buffer_size];
     DspParam param1, param2;
 
-    EffectsLibrary() {
-        SharedBuffer<shared_buffer_size>::initBuffer<DspEffect>(effects);
-        algo = (EffectAlgo)(1);
-    }
-    void nextEffect();
+    void setAlgo(uint8_t algo_id);
     void updateParams();
     void process(const float* in, float* out);
     DspEffect* getCurrentEffect() {
         return effects[algo];
     }
+};
+
+class EffectsLibraryLargeMemory : public EffectsLibraryBase,
+                                  public SharedBuffer<2048> {
+public:
+    EffectsLibraryLargeMemory() {
+        algo = (EffectAlgo)(1);
+        effects[0] = &bypass;
+        effects[1] = &barberpole_phaser;
+        effects[2] = &tz_flanger;
+        effects[3] = &phaser;
+        effects[4] = &chorus;
+        SharedBuffer<shared_buffer_size>::initBuffer<DspEffect>(effects);
+    };
 
 private:
     BypassEffect bypass;
-    DecimatorEffect decimator;
     BarberpolePhaserEffect barberpole_phaser;
     TzFlangerEffect tz_flanger;
-    // AllpassFilterEffect allpass_filter;
-    // CombFilterEffect comb_filter;
-    ChorusEffect chorus;
-    // DistFolderEffect dist_folder;
     PhaserEffect phaser;
+    ChorusEffect chorus;
 
-    static constexpr uint8_t num_effects = 6;
-    DspEffect* effects[num_effects] = {
-        &bypass,
-        &barberpole_phaser,
-        &tz_flanger,
-        &phaser,
-        //&allpass_filter,
-        //&comb_filter,
-        &chorus,
-        &decimator,
-    };
-
-    DISALLOW_COPY_AND_ASSIGN(EffectsLibrary);
+    DISALLOW_COPY_AND_ASSIGN(EffectsLibraryLargeMemory);
 };
 
-extern EffectsLibrary effects_library;
+extern EffectsLibraryLargeMemory effects_library2;
+extern EffectsLibraryLargeMemory effects_library4;
 }
 
 #endif

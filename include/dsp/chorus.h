@@ -34,7 +34,7 @@ public:
             out[i] = tmp / (1 + gain1 + gain2);
         }
     };
-    void updateParams(DspParam* param1, DspParam* param2) {
+    void updateParams(const DspParam* param1, const DspParam* param2) {
         depth1 = param1->asFloat() / ADC_RESOLUTION_DEZ;
         if (depth1 <= 0.5f) {
             gain2 = 0.0f;

@@ -46,7 +46,7 @@ public:
         }
     }
 
-    void updateParams(DspParam* param1, DspParam* param2) {
+    void updateParams(const DspParam* param1, const DspParam* param2) {
         float amount = freqCVLUT[ADC_RESOLUTION_DEZ - param1->last_result] * 0.001;
         oscillator.setFreq(amount);
 

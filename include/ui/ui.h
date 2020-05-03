@@ -71,9 +71,9 @@ enum UiStateCalibration {
 
 static UiVcfPage ui_page_vcf(UI_VCF);
 static UiFxPage ui_page_fx1(UI_FX1);
-static UiFxPage ui_page_fx2(UI_FX2);
+static UiFxPage ui_page_fx2(UI_FX2, &effects_library2);
 static UiFxPage ui_page_fx3(UI_FX3);
-static UiFxPage ui_page_fx4(UI_FX4);
+static UiFxPage ui_page_fx4(UI_FX4, &effects_library4);
 static UiLooperPage ui_page_looper(UI_LOOPER);
 static UiModulationPage ui_page_modulation(UI_MODULATION);
 static UiVolumePage ui_page_volume(UI_VOLUME);

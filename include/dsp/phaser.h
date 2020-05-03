@@ -35,18 +35,19 @@ public:
             for (size_t j = 0; j < num_stages; j++) {
                 tmp = stages[j].Allpass(tmp, 0.0f, ap_coef + lfo.sineOut * depth);
             }
-            //prev_sample = 
+            // prev_sample =
             out[i] = (in[i] + tmp) * 0.5f;
         }
     }
 
-    void updateParams(DspParam* param1, DspParam* param2) {
+    void updateParams(const DspParam* param1, const DspParam* param2) {
         depth = param1->asFloat() / ADC_RESOLUTION_DEZ;
         if (depth <= 0.5f) {
             lfo.setFreq(0.133);
         }
         else {
-            float rate = freqCVLUT[param1->last_result] / freqCVLUT[4095] * 0.867f + 0.133f ;
+            float rate =
+                freqCVLUT[param1->last_result] / freqCVLUT[4095] * 0.867f + 0.133f;
             lfo.setFreq(rate);
             depth = 0.5f;
         }

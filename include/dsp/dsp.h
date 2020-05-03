@@ -29,7 +29,7 @@ public:
     // TODO: look into block-based rendering to reduce number of function calls
     virtual void process(const float* in, float* out) = 0;
 
-    virtual void updateParams(DspParam* param1, DspParam* param2);
+    virtual void updateParams(const DspParam* param1, const DspParam* param2);
 
     // Note: if an effect uses shared_buffer, it should reset it in this function
     virtual void reset() {};

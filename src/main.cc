@@ -105,7 +105,8 @@ int main(void) {
      */
 
     uint32_t eventCounter = 0;
-    float tmp_buffer[USER_AUDIO_IO_BUFFER_SIZE];
+    float tmp_buffer1[USER_AUDIO_IO_BUFFER_SIZE];
+    float tmp_buffer2[USER_AUDIO_IO_BUFFER_SIZE];
 
     for (;;) {
         /*
@@ -113,12 +114,15 @@ int main(void) {
          */
         if (user_audio_in_buffer.isFull()) {
             // Looper state machine
-            effects_library.updateParams();
-            effects_library.process(user_audio_in_buffer.buffer, tmp_buffer);
+            effects_library2.updateParams();
+            effects_library2.process(user_audio_in_buffer.buffer, tmp_buffer1);
             user_audio_in_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
 
             // apply the looper effects
-            looper.process(tmp_buffer, user_audio_out_buffer.buffer);
+            looper.process(tmp_buffer1, user_audio_out_buffer.buffer);
+            // looper.process(tmp_buffer1, tmp_buffer2);
+            // effects_library4.updateParams();
+            // effects_library4.process(tmp_buffer2, user_audio_out_buffer.buffer);
             user_audio_out_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
         };
         ui.render();
