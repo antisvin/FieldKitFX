@@ -35,8 +35,8 @@ public:
 
     template <typename Effect>
     void initBuffer(Effect** effects) {
-        for (size_t i = 1; i < sizeof(effects); i++) {
-            effects[i]->init(shared_buffer);
+        for (size_t i = 0; i < sizeof(effects); i++) {
+            effects[i + 1]->init(shared_buffer);
         }
     }
 };

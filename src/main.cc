@@ -119,10 +119,10 @@ int main(void) {
             user_audio_in_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
 
             // apply the looper effects
-            looper.process(tmp_buffer1, user_audio_out_buffer.buffer);
-            // looper.process(tmp_buffer1, tmp_buffer2);
-            // effects_library4.updateParams();
-            // effects_library4.process(tmp_buffer2, user_audio_out_buffer.buffer);
+            // looper.process(tmp_buffer1, user_audio_out_buffer.buffer);
+            looper.process(tmp_buffer1, tmp_buffer2);
+            effects_library4.updateParams();
+            effects_library4.process(tmp_buffer2, user_audio_out_buffer.buffer);
             user_audio_out_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
         };
         ui.render();
