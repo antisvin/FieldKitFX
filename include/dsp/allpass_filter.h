@@ -12,8 +12,8 @@ public:
 
     AllpassFilterEffect() = default;
 
-    void init(float* buffer) {
-        delay_line.Init(buffer);
+    void init(float* shared_buffer) {
+        delay_line.Init(shared_buffer);
     };
 
     void process(const float* in, float* out) override {

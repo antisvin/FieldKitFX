@@ -26,9 +26,22 @@ enum EffectAlgo {
 };
 
 //__attribute__((section(".ccmram")))
-static float shared_buffer[shared_buffer_size];
+// static float shared_buffer[shared_buffer_size];
 
-class EffectsLibrary {
+template <size_t shared_buffer_size>
+class SharedBuffer {
+public:
+    float shared_buffer[shared_buffer_size];
+
+    template <typename Effect>
+    void initBuffer(Effect** effects) {
+        for (size_t i = 1; i < sizeof(effects); i++) {
+            effects[i]->init(shared_buffer);
+        }
+    }
+};
+
+class EffectsLibrary : public SharedBuffer<shared_buffer_size> {
 public:
     EffectAlgo algo;
     bool refreshUi = true;
@@ -36,12 +49,7 @@ public:
     DspParam param1, param2;
 
     EffectsLibrary() {
-        barberpole_phaser.init(shared_buffer);
-        tz_flanger.init(shared_buffer);
-        chorus.init(shared_buffer);
-        // comb_filter.init(shared_buffer);
-        // dist_folder.init(shared_buffer);
-        phaser.init(shared_buffer);
+        SharedBuffer<shared_buffer_size>::initBuffer<DspEffect>(effects);
         algo = (EffectAlgo)(1);
     }
     void nextEffect();

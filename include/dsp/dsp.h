@@ -24,6 +24,8 @@ protected:
 public:
     DspEffect() = default;
 
+    virtual void init(float* shared_buffer) {};
+
     // TODO: look into block-based rendering to reduce number of function calls
     virtual void process(const float* in, float* out) = 0;
 
