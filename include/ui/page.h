@@ -87,10 +87,11 @@ public:
     };
 };
 
-class UiVcfPage : public StatefulUiPage<COL_BLUE> {
+class UiVcfPage : public StatefulUiPage<COL_PINK> {
 public:
-    UiVcfPage(UiPageId page_id)
-        : StatefulUiPage<COL_BLUE>(page_id) {};
+    UiVcfPage(UiPageId page_id, EffectsLibraryBase* effects_library)
+        : StatefulUiPage<COL_PINK>(page_id)
+        , effects_library(effects_library) {};
 
     void fromSettings() override {
         pending_state = (Color)settings.current_preset.vcf_state.engine;
@@ -100,15 +101,14 @@ public:
 
     void toSettings() override {
         settings.current_preset.vcf_state.engine = (uint8_t)pending_state;
+        effects_library->setAlgo((uint8_t)pending_state);
     }
+
+    EffectsLibraryBase* effects_library;
 };
 
 class UiFxPage : public StatefulUiPage<COL_ORANGE> {
 public:
-    UiFxPage(UiPageId page_id)
-        : StatefulUiPage<COL_ORANGE>(page_id)
-        , effects_library(nullptr) {};
-
     UiFxPage(UiPageId page_id, EffectsLibraryBase* effects_library)
         : StatefulUiPage<COL_ORANGE>(page_id)
         , effects_library(effects_library) {};
@@ -121,9 +121,7 @@ public:
 
     void toSettings() override {
         settings.current_preset.fx_state[page_id - 1].engine = (uint8_t)pending_state;
-        if (effects_library != nullptr) {
-            effects_library->setAlgo((uint8_t)pending_state);
-        }
+        effects_library->setAlgo((uint8_t)pending_state);
     }
 
 private:
@@ -251,7 +249,6 @@ public:
 private:
     uint8_t last_loaded_preset_id;
 };
-
 }
 
 #endif

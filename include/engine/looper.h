@@ -40,6 +40,7 @@ enum LooperState { ARMED = 0, RECORD, PLAYBACK, OVERDUB, ERASE };
 class Looper {
 private:
     RamChip* memory;
+    float looperSampleBuffer_dry[USER_AUDIO_IO_BUFFER_SIZE];
     DISALLOW_COPY_AND_ASSIGN(Looper);
 
 public:

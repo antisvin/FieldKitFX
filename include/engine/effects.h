@@ -9,6 +9,8 @@
 #include "dsp/decimator.h"
 #include "dsp/distfolder.h"
 #include "dsp/frequency_shifter.h"
+#include "dsp/ms20.h"
+#include "dsp/oberheim.h"
 #include "dsp/phaser.h"
 #include "dsp/tz_flanger.h"
 #include "utils/moving_average_filter.h"
@@ -100,6 +102,24 @@ private:
     DISALLOW_COPY_AND_ASSIGN(EffectsLibraryLargeMemory);
 };
 
+class FiltersLibrary : public EffectsLibraryBase {
+public:
+    static constexpr uint8_t num_effects = 3;
+    FiltersLibrary() {
+        effects[0] = &bypass;
+        effects[1] = &ms20;
+        effects[2] = &oberheim_svf;
+    }
+
+private:
+    BypassEffect bypass;
+    Ms20Filter ms20;
+    OberheimSvfFilter oberheim_svf;
+
+    DISALLOW_COPY_AND_ASSIGN(FiltersLibrary);
+};
+
+extern FiltersLibrary filters_library;
 extern EffectsLibrarySmallMemory effects_library1;
 extern EffectsLibraryLargeMemory effects_library2;
 extern EffectsLibrarySmallMemory effects_library3;

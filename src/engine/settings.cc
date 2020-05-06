@@ -6,7 +6,7 @@ bool Settings::Init() {
     persistent_data_.codec_settings_data.in_gain = 127U;
     persistent_data_.codec_settings_data.out_gain = 127U;
 
-    current_preset.fx_state[0].engine = 1U;
+    // current_preset.fx_state[0].engine = 1U;
     current_preset.looper_state.engine = 1U;
     current_preset.mod_state.engine = 1U;
     bool success = chunk_storage_.Init(&persistent_data_, &state_);

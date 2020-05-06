@@ -69,7 +69,7 @@ enum UiStateCalibration {
     UI_renderMagnitude_Calibration
 };
 
-static UiVcfPage ui_page_vcf(UI_VCF);
+static UiVcfPage ui_page_vcf(UI_VCF, &filters_library);
 static UiFxPage ui_page_fx1(UI_FX1, &effects_library1);
 static UiFxPage ui_page_fx2(UI_FX2, &effects_library2);
 static UiFxPage ui_page_fx3(UI_FX3, &effects_library3);

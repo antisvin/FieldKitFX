@@ -22,7 +22,6 @@ void Looper::init(RamChip* ram) {
 
 void Looper::process(float* in, float* out) {
     Frame processingFrame;
-    float looperSampleBuffer_dry[USER_AUDIO_IO_BUFFER_SIZE];
 
     switch (state) {
     case ARMED:
@@ -146,17 +145,3 @@ void Looper::switchState(LooperState new_state) {
 }
 
 }
-
-// UNUSED
-/*
-void looper_linearInterp(float *clean, float *dirty, float *out,
-                         uint16_t ADCValue)
-{
-    uint8_t i;
-    float temp = (float)ADCValue / 4095.0;
-    for (i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++)
-    {
-        out[i] = clean[i] * (1.0f - temp) + dirty[i] * temp;
-    }
-}
-*/
