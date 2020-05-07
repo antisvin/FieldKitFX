@@ -12,6 +12,7 @@
 #include "dsp/ms20.h"
 #include "dsp/oberheim.h"
 #include "dsp/phaser.h"
+#include "dsp/triple_peaks.h"
 #include "dsp/tz_flanger.h"
 #include "utils/moving_average_filter.h"
 #include "utils/utils.h"
@@ -104,17 +105,19 @@ private:
 
 class FiltersLibrary : public EffectsLibraryBase {
 public:
-    static constexpr uint8_t num_effects = 3;
+    static constexpr uint8_t num_effects = 4;
     FiltersLibrary() {
         effects[0] = &bypass;
         effects[1] = &ms20;
         effects[2] = &oberheim_svf;
+        effects[3] = &triple_peaks;
     }
 
 private:
     BypassEffect bypass;
     Ms20Filter ms20;
     OberheimSvfFilter oberheim_svf;
+    TriplePeaksFilter triple_peaks;
 
     DISALLOW_COPY_AND_ASSIGN(FiltersLibrary);
 };

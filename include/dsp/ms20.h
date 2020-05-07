@@ -62,7 +62,6 @@ private:
     float fRec1[2];
     float fRec2[2];
     float fRec3[2];
-    static constexpr float satThresh = 0.8f;
     static constexpr float fSampleRate = 48000.0f;
     static constexpr float fConst0 = (6.28318548f /
         std::min<float>(192000.0f, std::max<float>(1.0f, float(fSampleRate))));

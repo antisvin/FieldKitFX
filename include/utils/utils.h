@@ -62,6 +62,10 @@ inline float crossfade(float a, float b, float fade) {
 
 }
 
+inline float mydsp_faustpower2_f(float value) {
+    return (value * value);
+}
+
 /*
 #define DISALLOW_COPY_AND_ASSIGN(TypeName)                                     \
     TypeName(const TypeName&) = delete;                                        \

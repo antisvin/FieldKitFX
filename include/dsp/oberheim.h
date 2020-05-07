@@ -58,10 +58,6 @@ private:
     static constexpr float fSampleRate = 48000.0f;
     static constexpr float fConst0 = (6.28318548f /
         std::min<float>(192000.0f, std::max<float>(1.0f, float(fSampleRate))));
-
-    static float mydsp_faustpower2_f(float value) {
-        return (value * value);
-    }
 };
 
 }
