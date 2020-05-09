@@ -8,6 +8,7 @@
 #include "dsp/comb_filter.h"
 #include "dsp/decimator.h"
 #include "dsp/distfolder.h"
+#include "dsp/formants.h"
 #include "dsp/frequency_shifter.h"
 #include "dsp/ms20.h"
 #include "dsp/oberheim.h"
@@ -105,12 +106,13 @@ private:
 
 class FiltersLibrary : public EffectsLibraryBase {
 public:
-    static constexpr uint8_t num_effects = 4;
+    static constexpr uint8_t num_effects = 5;
     FiltersLibrary() {
         effects[0] = &bypass;
         effects[1] = &ms20;
         effects[2] = &oberheim_svf;
         effects[3] = &triple_peaks;
+        effects[4] = &formant;
     }
 
 private:
@@ -118,6 +120,7 @@ private:
     Ms20Filter ms20;
     OberheimSvfFilter oberheim_svf;
     TriplePeaksFilter triple_peaks;
+    FormantFilter formant;
 
     DISALLOW_COPY_AND_ASSIGN(FiltersLibrary);
 };

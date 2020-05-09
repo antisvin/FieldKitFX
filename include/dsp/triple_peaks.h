@@ -59,8 +59,17 @@ public:
             fRec8[0] = fTemp9;
             float fTemp10 = std::max<float>(
                 -1.0f, std::min<float>(1.0f, ((fRec0 + fRec3) + fRec6)));
-            output[i] = float(
+            float out = float(
                 (fTemp10 * (1.0f - (0.333333343f * mydsp_faustpower2_f(fTemp10)))));
+
+            if (fabsf(out) >= 1.0f) {
+                out = copysign(2.0f / 3.0f, out);
+            }
+            else {
+                out = out - out * out * out / 3.0f;
+            }
+            output[i] = out;
+
             fRec1[1] = fRec1[0];
             fRec2[1] = fRec2[0];
             fRec4[1] = fRec4[0];

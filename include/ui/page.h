@@ -87,10 +87,10 @@ public:
     };
 };
 
-class UiVcfPage : public StatefulUiPage<COL_GREEN> {
+class UiVcfPage : public StatefulUiPage<COL_ORANGE> {
 public:
     UiVcfPage(UiPageId page_id, EffectsLibraryBase* effects_library)
-        : StatefulUiPage<COL_GREEN>(page_id)
+        : StatefulUiPage<COL_ORANGE>(page_id)
         , effects_library(effects_library) {};
 
     void fromSettings() override {
