@@ -5,7 +5,7 @@
 #include "dsp/dsp.h"
 
 namespace fieldkitfx {
-
+#if 0
 static constexpr uint8_t voice_type_offset = 3;
 static constexpr uint8_t voice_type_0 = 0 << voice_type_offset;
 static constexpr uint8_t voice_type_1 = 1 << voice_type_offset;
@@ -29,6 +29,7 @@ static const uint8_t formants_map[25] { voice_type_0 | vowel_a,
     voice_type_3 | vowel_d, voice_type_3 | vowel_c, voice_type_3 | vowel_b,
     voice_type_3 | vowel_a, voice_type_4 | vowel_a, voice_type_4 | vowel_b,
     voice_type_4 | vowel_c, voice_type_4 | vowel_d, voice_type_4 | vowel_e };
+#endif
 
 class FormantFilter : public DspEffect {
 public:
@@ -761,7 +762,7 @@ public:
                 (((fRec3[2] * fSlow117) + (2.0f * (fRec3[1] * fSlow118))) / fSlow119));
             fRec4[0] = (fTemp0 -
                 (((fRec4[2] * fSlow129) + (2.0f * (fRec4[1] * fSlow130))) / fSlow131));
-            output[i] =
+            float out =
                 float(((fRec0[2] * fSlow74) +
                     (((fRec1[2] * fSlow97) +
                          (((fRec2[2] * fSlow108) +
@@ -772,6 +773,14 @@ public:
                              ((fRec1[0] * fSlow95) / fSlow96))) +
                         ((fRec0[0] * fSlow72) / fSlow73)))) *
                 0.25f;
+            if (fabsf(out) >= 1.0f) {
+                out = copysign(2.0f / 3.0f, out);
+            }
+            else {
+                out = out - out * out * out / 3.0f;
+            }
+            output[i] = out * 1.4f;
+
             fRec0[2] = fRec0[1];
             fRec0[1] = fRec0[0];
             fRec1[2] = fRec1[1];

@@ -45,7 +45,7 @@ public:
                 fRec0 = fRec0 - fRec0 * fRec0 * fRec0 / 3.0f;
             }
 
-            output[i] = fRec0;
+            output[i] = fRec0 * 1.4f;
             fRec1[1] = fRec1[0];
             fRec2[1] = fRec2[0];
             fRec3[1] = fRec3[0];
