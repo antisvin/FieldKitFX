@@ -41,9 +41,10 @@ public:
 
 private:
     SPI_HandleTypeDef* spi_controller;
-    DISALLOW_COPY_AND_ASSIGN(CvRouter);
     uint8_t routing_state[12];
     uint8_t settings_state[12];
+
+    DISALLOW_COPY_AND_ASSIGN(CvRouter);
 };
 }
 #endif /* CVROUTER_H_ */

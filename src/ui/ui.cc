@@ -64,7 +64,7 @@ void UI::render() {
         }
         break;
     case UI_matrixRouting_update:
-        if (matrixRefreshFlag) {
+        if (matrixRefreshFlag && fxSelector.getSelectedFx() == FX_LOOPER) {
             cvMatrix.updateCvDestinations();
         }
         break;
