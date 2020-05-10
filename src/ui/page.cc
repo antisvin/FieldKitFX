@@ -3,13 +3,15 @@
 
 namespace fieldkitfx {
 
-// template <Color max_color>
-// void StatefulUiPage<max_color>::syncState() {
-//}
+void UiVcfPage::onButtonPressed() {
+    parameter_controller.setParams2Page(this);
+    fromSettings();
+}
 
-// void UiFxPage::render() {
-//    cvMatrix.la.array[page_id].setColor((Color)pending_state);
-//}
+void UiFxPage::onButtonPressed() {
+    parameter_controller.setParams2Page(this);
+    fromSettings();
+}
 
 // void UiVcoPage::render() {
 //}

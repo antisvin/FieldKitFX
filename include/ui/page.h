@@ -31,6 +31,10 @@ public:
     BaseUiPage(UiPageId page_id)
         : page_id(page_id) {};
 
+    BaseUiPage(UiPageId page_id, EffectsLibraryBase* effects_library)
+        : effects_library(effects_library)
+        , page_id(page_id) {};
+
     void reset() {
         cvMatrix.la.setIntensity((uint8_t)page_id, CV_RGB_LED_INTENSITY);
         fromSettings();
@@ -52,6 +56,7 @@ public:
         loopButton.setColor(pending_state);
         cvMatrix.la.setColor((uint8_t)page_id, last_state);
     }
+    EffectsLibraryBase* effects_library;
 
 protected:
     Color pending_state, last_state;
@@ -63,6 +68,9 @@ class StatefulUiPage : public BaseUiPage {
 public:
     StatefulUiPage(UiPageId page_id)
         : BaseUiPage(page_id) {};
+
+    StatefulUiPage(UiPageId page_id, EffectsLibraryBase* effects_library)
+        : BaseUiPage(page_id, effects_library) {};
 
     void onLoopButtonPressed(bool shouldSave) override {
         if (pending_state == max_color) {
@@ -90,8 +98,9 @@ public:
 class UiVcfPage : public StatefulUiPage<COL_ORANGE> {
 public:
     UiVcfPage(UiPageId page_id, EffectsLibraryBase* effects_library)
-        : StatefulUiPage<COL_ORANGE>(page_id)
-        , effects_library(effects_library) {};
+        : StatefulUiPage<COL_ORANGE>(page_id, effects_library) {};
+
+    void onButtonPressed() override;
 
     void fromSettings() override {
         pending_state = (Color)settings.current_preset.vcf_state.engine;
@@ -103,15 +112,14 @@ public:
         settings.current_preset.vcf_state.engine = (uint8_t)pending_state;
         effects_library->setAlgo((uint8_t)pending_state);
     }
-
-    EffectsLibraryBase* effects_library;
 };
 
 class UiFxPage : public StatefulUiPage<COL_ORANGE> {
 public:
     UiFxPage(UiPageId page_id, EffectsLibraryBase* effects_library)
-        : StatefulUiPage<COL_ORANGE>(page_id)
-        , effects_library(effects_library) {};
+        : StatefulUiPage<COL_ORANGE>(page_id, effects_library) {};
+
+    void onButtonPressed() override;
 
     void fromSettings() override {
         pending_state = (Color)settings.current_preset.fx_state[page_id - 1].engine;
@@ -123,9 +131,6 @@ public:
         settings.current_preset.fx_state[page_id - 1].engine = (uint8_t)pending_state;
         effects_library->setAlgo((uint8_t)pending_state);
     }
-
-private:
-    EffectsLibraryBase* effects_library;
 };
 
 class UiLooperPage : public StatefulUiPage<COL_PINK> {
@@ -249,6 +254,35 @@ public:
 private:
     uint8_t last_loaded_preset_id;
 };
+
+class ParameterController {
+public:
+    ParameterController(BaseUiPage* params2, BaseUiPage* params4)
+        : params2_page(params2)
+        , params4_page(params4) {};
+
+    void setParams2Page(BaseUiPage* page) {
+        // params2_page->lockParams();
+        params2_page = page;
+    }
+    void setParams4Page(BaseUiPage* page) {
+        // params4_page->lockParams();
+        params4_page = page;
+    }
+    void updateParams2() {
+        params2_page->effects_library->updateParams();
+    };
+    void updateParams4() {
+        // params4_page->updateParams();
+    }
+
+private:
+    BaseUiPage* params2_page;
+    BaseUiPage* params4_page;
+};
+
+extern ParameterController parameter_controller;
+
 }
 
 #endif

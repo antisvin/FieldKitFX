@@ -177,6 +177,7 @@ void UI::renderSettings() {
             current_page_id = (UiPageId)last_pressed_button;
             current_page = pages[last_pressed_button];
             current_page->reset();
+            current_page->onButtonPressed();
         }
         else {
             // Same page that was previously active is selected
@@ -186,6 +187,7 @@ void UI::renderSettings() {
             // Loop button pressed - switch pending state, but don't save yet
             else if (loopButton.checkRisingEdge()) {
                 current_page->onLoopButtonPressed(false);
+                current_page->renderState();
             }
         }
     }
@@ -194,10 +196,14 @@ void UI::renderSettings() {
             // Button got depressed. It needs some antidepressants to feel
             // better!
             current_page->onButtonDepressed();
+            current_page->renderState();
         }
         // Loop button pressed - store settings
         if (loopButton.checkRisingEdge()) {
             current_page->onLoopButtonPressed(true);
+            current_page->renderState();
+            // current_page->renderState();
+            //            updateBlink();
         }
     }
     updateBlink();
@@ -345,4 +351,19 @@ void UI::renderMagnitude(float magnitude) {
         previousMagnitude = scaledMagnitude;
     }
 }
+
+UiVcfPage ui_page_vcf(UI_VCF, &filters_library);
+UiFxPage ui_page_fx1(UI_FX1, &effects_library1);
+UiFxPage ui_page_fx2(UI_FX2, &effects_library2);
+UiFxPage ui_page_fx3(UI_FX3, &effects_library3);
+UiFxPage ui_page_fx4(UI_FX4, &effects_library4);
+UiLooperPage ui_page_looper(UI_LOOPER);
+UiModulationPage ui_page_modulation(UI_MODULATION);
+UiVolumePage ui_page_volume(UI_VOLUME);
+UiPresetRandomPage ui_page_preset_random(UI_PRESET_RANDOM);
+UiPresetSavePage ui_page_preset_save(UI_PRESET_SAVE);
+UiPresetLoadPage ui_page_preset_load(UI_PRESET_LOAD);
+
+ParameterController parameter_controller(&ui_page_vcf, &ui_page_looper);
+
 }

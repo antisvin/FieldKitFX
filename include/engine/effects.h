@@ -29,9 +29,6 @@ enum EffectAlgo {
     DSP_DECIMATOR,
 };
 
-//__attribute__((section(".ccmram")))
-// static float shared_buffer[shared_buffer_size];
-
 template <size_t shared_buffer_size>
 class SharedBuffer {
 public:

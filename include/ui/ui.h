@@ -58,6 +58,18 @@ enum UiState {
     UI_tresholdcv_update
 };
 
+extern UiVcfPage ui_page_vcf;
+extern UiFxPage ui_page_fx1;
+extern UiFxPage ui_page_fx2;
+extern UiFxPage ui_page_fx3;
+extern UiFxPage ui_page_fx4;
+extern UiLooperPage ui_page_looper;
+extern UiModulationPage ui_page_modulation;
+extern UiVolumePage ui_page_volume;
+extern UiPresetRandomPage ui_page_preset_random;
+extern UiPresetSavePage ui_page_preset_save;
+extern UiPresetLoadPage ui_page_preset_load;
+
 /*
  * States of the calibration state machine.
  */
@@ -68,18 +80,6 @@ enum UiStateCalibration {
     UI_matrixButtons_update_Calibration = 0,
     UI_renderMagnitude_Calibration
 };
-
-static UiVcfPage ui_page_vcf(UI_VCF, &filters_library);
-static UiFxPage ui_page_fx1(UI_FX1, &effects_library1);
-static UiFxPage ui_page_fx2(UI_FX2, &effects_library2);
-static UiFxPage ui_page_fx3(UI_FX3, &effects_library3);
-static UiFxPage ui_page_fx4(UI_FX4, &effects_library4);
-static UiLooperPage ui_page_looper(UI_LOOPER);
-static UiModulationPage ui_page_modulation(UI_MODULATION);
-static UiVolumePage ui_page_volume(UI_VOLUME);
-static UiPresetRandomPage ui_page_preset_random(UI_PRESET_RANDOM);
-static UiPresetSavePage ui_page_preset_save(UI_PRESET_SAVE);
-static UiPresetLoadPage ui_page_preset_load(UI_PRESET_LOAD);
 
 class UI {
 public:
@@ -97,7 +97,8 @@ private:
     UiState current_ui_state;
     UiStateCalibration current_ui_state_calibration;
     TIM_HandleTypeDef UITimer;
-    uint8_t blink_counter;
+    BaseUiPage* params2_page = &ui_page_vcf;
+    uint16_t blink_counter;
     uint8_t last_pressed_button;
     bool matrixRefreshFlag;
     void renderLooper();
