@@ -3,11 +3,6 @@
 
 namespace fieldkitfx {
 
-void UiVcfPage::onButtonPressed() {
-    parameter_controller.setParams2Page(this);
-    fromSettings();
-}
-
 void UiFxPage::onButtonPressed() {
     parameter_controller.setParams2Page(this);
     fromSettings();

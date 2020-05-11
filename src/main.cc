@@ -115,17 +115,15 @@ int main(void) {
          */
         if (user_audio_in_buffer.isFull()) {
             filters_library.process(user_audio_in_buffer.buffer, tmp_buffer1);
+            user_audio_in_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
 
-            // Looper state machine
             effects_library1.process(tmp_buffer1, tmp_buffer2);
             effects_library2.process(tmp_buffer2, tmp_buffer1);
-            user_audio_in_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
+            effects_library2.process(tmp_buffer1, tmp_buffer2);
 
             // apply the looper effects
             // looper.process(tmp_buffer1, user_audio_out_buffer.buffer);
-            looper.process(tmp_buffer1, tmp_buffer2);
-            effects_library3.process(tmp_buffer2, tmp_buffer1);
-            effects_library4.process(tmp_buffer1, user_audio_out_buffer.buffer);
+            looper.process(tmp_buffer2, user_audio_out_buffer.buffer);
             user_audio_out_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
 
             parameter_controller.updateParams2();

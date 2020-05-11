@@ -58,13 +58,13 @@ enum UiState {
     UI_tresholdcv_update
 };
 
-extern UiVcfPage ui_page_vcf;
 extern UiFxPage ui_page_fx1;
 extern UiFxPage ui_page_fx2;
 extern UiFxPage ui_page_fx3;
 extern UiFxPage ui_page_fx4;
 extern UiLooperPage ui_page_looper;
 extern UiModulationPage ui_page_modulation;
+extern UiParametersPage ui_page_parameters;
 extern UiVolumePage ui_page_volume;
 extern UiPresetRandomPage ui_page_preset_random;
 extern UiPresetSavePage ui_page_preset_save;
@@ -97,7 +97,7 @@ private:
     UiState current_ui_state;
     UiStateCalibration current_ui_state_calibration;
     TIM_HandleTypeDef UITimer;
-    BaseUiPage* params2_page = &ui_page_vcf;
+    BaseUiPage* params2_page = &ui_page_fx1;
     uint16_t blink_counter;
     uint8_t last_pressed_button;
     bool matrixRefreshFlag;
@@ -109,19 +109,19 @@ private:
     UiPageId current_page_id;
 
     BaseUiPage* pages[num_ui_pages] = {
-        &ui_page_vcf,
         &ui_page_fx1,
         &ui_page_fx2,
         &ui_page_fx3,
         &ui_page_fx4,
         &ui_page_looper,
         &ui_page_modulation,
+        &ui_page_parameters,
         &ui_page_volume,
         &ui_page_preset_random,
         &ui_page_preset_save,
         &ui_page_preset_load,
     };
-    BaseUiPage* current_page = &ui_page_vcf;
+    BaseUiPage* current_page = &ui_page_fx1;
 };
 
 }

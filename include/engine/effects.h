@@ -58,6 +58,42 @@ public:
     }
 };
 
+class FiltersLibrary : public EffectsLibraryBase {
+public:
+    static constexpr uint8_t num_effects = 5;
+    FiltersLibrary() {
+        effects[0] = &bypass;
+        effects[1] = &ms20;
+        effects[2] = &oberheim_svf;
+        effects[3] = &triple_peaks;
+        effects[4] = &formant;
+    }
+
+private:
+    BypassEffect bypass;
+    Ms20Filter ms20;
+    OberheimSvfFilter oberheim_svf;
+    TriplePeaksFilter triple_peaks;
+    FormantFilter formant;
+
+    DISALLOW_COPY_AND_ASSIGN(FiltersLibrary);
+};
+
+class EffectsLibraryNoMemory : public EffectsLibraryBase {
+public:
+    EffectsLibraryNoMemory() {
+        effects[0] = &bypass;
+        effects[1] = &bypass;
+        effects[2] = &bypass;
+        effects[3] = &bypass;
+        effects[4] = &bypass;
+    }
+
+private:
+    BypassEffect bypass;
+    DISALLOW_COPY_AND_ASSIGN(EffectsLibraryNoMemory);
+};
+
 class EffectsLibrarySmallMemory : public EffectsLibraryBase, public SharedBuffer<16> {
 public:
     EffectsLibrarySmallMemory() {
@@ -101,32 +137,11 @@ private:
     DISALLOW_COPY_AND_ASSIGN(EffectsLibraryLargeMemory);
 };
 
-class FiltersLibrary : public EffectsLibraryBase {
-public:
-    static constexpr uint8_t num_effects = 5;
-    FiltersLibrary() {
-        effects[0] = &bypass;
-        effects[1] = &ms20;
-        effects[2] = &oberheim_svf;
-        effects[3] = &triple_peaks;
-        effects[4] = &formant;
-    }
-
-private:
-    BypassEffect bypass;
-    Ms20Filter ms20;
-    OberheimSvfFilter oberheim_svf;
-    TriplePeaksFilter triple_peaks;
-    FormantFilter formant;
-
-    DISALLOW_COPY_AND_ASSIGN(FiltersLibrary);
-};
-
 extern FiltersLibrary filters_library;
-extern EffectsLibrarySmallMemory effects_library1;
-extern EffectsLibraryLargeMemory effects_library2;
-extern EffectsLibrarySmallMemory effects_library3;
-extern EffectsLibraryLargeMemory effects_library4;
+extern EffectsLibraryNoMemory effects_library1;
+extern EffectsLibrarySmallMemory effects_library2;
+extern EffectsLibraryLargeMemory effects_library3;
+
 }
 
 #endif

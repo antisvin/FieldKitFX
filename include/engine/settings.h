@@ -8,11 +8,17 @@ namespace fieldkitfx {
 
 constexpr size_t num_presets = 4;
 
+// This is used for FX or filter slots
 struct Slot2Data {
     uint8_t engine;
     uint16_t params[2];
+    uint16_t mix;
+    uint8_t chain;
+    int16_t mod_influence[2];
+    int16_t env_influence[2];
 };
 
+// This is used for looper and modulators
 struct Slot4Data {
     uint8_t engine;
     uint16_t params[4];
@@ -20,24 +26,20 @@ struct Slot4Data {
 
 struct PresetData {
     Slot2Data vcf_state;
-    Slot2Data fx_state[4];
+    Slot2Data fx_state[3];
     Slot4Data looper_state;
-    Slot4Data mod_state;
+    Slot4Data mod_state[2];
 };
 
-struct CodecSettingsData {
+struct SettingsData {
+    uint8_t last_preset_id;
     uint8_t in_gain;
     uint8_t out_gain;
 };
 
-struct GeneralSettingsData {
-    uint8_t last_preset_id;
-};
-
 struct PersistentData {
     PresetData presets[num_presets];
-    CodecSettingsData codec_settings_data;
-    GeneralSettingsData general_settings_data;
+    SettingsData settings_data;
     uint8_t padding[16];
     enum { tag = 0x494C4143 }; // CALI
 };
@@ -70,20 +72,12 @@ public:
         return &persistent_data_.presets[position];
     }
 
-    inline const CodecSettingsData& codec_settings_data() const {
-        return persistent_data_.codec_settings_data;
+    inline const SettingsData& settings_data() const {
+        return persistent_data_.settings_data;
     }
 
-    inline CodecSettingsData* mutable_codec_settings_data() {
-        return &persistent_data_.codec_settings_data;
-    }
-
-    inline const GeneralSettingsData& general_settings_data() const {
-        return persistent_data_.general_settings_data;
-    }
-
-    inline GeneralSettingsData* mutable_general_settings_data() {
-        return &persistent_data_.general_settings_data;
+    inline SettingsData* mutable_settings_data() {
+        return &persistent_data_.settings_data;
     }
 
     inline const State& state() const {
@@ -100,7 +94,7 @@ public:
 
     void storePreset(uint8_t preset_id) {
         persistent_data_.presets[preset_id] = current_preset;
-        persistent_data_.general_settings_data.last_preset_id = preset_id;
+        persistent_data_.settings_data.last_preset_id = preset_id;
         SavePersistentData();
     }
 

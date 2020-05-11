@@ -13,13 +13,13 @@ namespace fieldkitfx {
 constexpr uint8_t num_ui_pages = 11U;
 
 enum UiPageId {
-    UI_VCF,
     UI_FX1,
     UI_FX2,
     UI_FX3,
     UI_FX4,
     UI_LOOPER,
     UI_MODULATION,
+    UI_PARAMETERS,
     UI_VOLUME,
     UI_PRESET_RANDOM,
     UI_PRESET_SAVE,
@@ -95,25 +95,6 @@ public:
     };
 };
 
-class UiVcfPage : public StatefulUiPage<COL_ORANGE> {
-public:
-    UiVcfPage(UiPageId page_id, EffectsLibraryBase* effects_library)
-        : StatefulUiPage<COL_ORANGE>(page_id, effects_library) {};
-
-    void onButtonPressed() override;
-
-    void fromSettings() override {
-        pending_state = (Color)settings.current_preset.vcf_state.engine;
-        last_state = pending_state;
-        cvMatrix.la.array[page_id].setColor(pending_state);
-    }
-
-    void toSettings() override {
-        settings.current_preset.vcf_state.engine = (uint8_t)pending_state;
-        effects_library->setAlgo((uint8_t)pending_state);
-    }
-};
-
 class UiFxPage : public StatefulUiPage<COL_ORANGE> {
 public:
     UiFxPage(UiPageId page_id, EffectsLibraryBase* effects_library)
@@ -122,13 +103,13 @@ public:
     void onButtonPressed() override;
 
     void fromSettings() override {
-        pending_state = (Color)settings.current_preset.fx_state[page_id - 1].engine;
+        pending_state = (Color)settings.current_preset.fx_state[page_id].engine;
         last_state = pending_state;
         cvMatrix.la.array[page_id].setColor(pending_state);
     }
 
     void toSettings() override {
-        settings.current_preset.fx_state[page_id - 1].engine = (uint8_t)pending_state;
+        settings.current_preset.fx_state[page_id].engine = (uint8_t)pending_state;
         effects_library->setAlgo((uint8_t)pending_state);
     }
 };
@@ -155,13 +136,32 @@ public:
         : StatefulUiPage<COL_PINK>(page_id) {};
 
     void fromSettings() override {
-        pending_state = (Color)settings.current_preset.mod_state.engine;
+        pending_state = (Color)settings.current_preset.mod_state[0].engine;
         last_state = pending_state;
         cvMatrix.la.array[page_id].setColor(pending_state);
     }
 
     void toSettings() override {
-        settings.current_preset.mod_state.engine = (uint8_t)pending_state;
+        settings.current_preset.mod_state[0].engine = (uint8_t)pending_state;
+    }
+};
+
+class UiParametersPage : public StatefulUiPage<COL_NONE> {
+public:
+    UiParametersPage(UiPageId page_id)
+        : StatefulUiPage<COL_NONE>(page_id) {};
+
+    // This page has 4 subpages: envelope modulation, parameters modulation,
+    // feedback levels, unit chains
+
+    void fromSettings() override {
+        // pending_state = (Color)settings.current_preset.mod_state.engine;
+        last_state = pending_state;
+        cvMatrix.la.array[page_id].setColor(pending_state);
+    }
+
+    void toSettings() override {
+        // settings.current_preset.mod_state.engine = (uint8_t)pending_state;
     }
 };
 
@@ -176,9 +176,9 @@ public:
     }
 
     void toSettings() override {
-        auto codec_settings = settings.mutable_codec_settings_data();
-        codec_settings->in_gain = in_gain;
-        codec_settings->out_gain = out_gain;
+        auto settings_data = settings.mutable_settings_data();
+        settings_data->in_gain = in_gain;
+        settings_data->out_gain = out_gain;
         settings.SavePersistentData();
     }
 

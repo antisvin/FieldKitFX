@@ -147,10 +147,10 @@ void UI::renderSettingsInit() {
     for (uint8_t page = 0; page < num_ui_pages; page++) {
         pages[page]->reset();
     }
+    filters_library.refreshUi = true;
     effects_library1.refreshUi = true;
     effects_library2.refreshUi = true;
     effects_library3.refreshUi = true;
-    effects_library4.refreshUi = true;
 }
 
 void UI::updateBlink() {
@@ -352,18 +352,18 @@ void UI::renderMagnitude(float magnitude) {
     }
 }
 
-UiVcfPage ui_page_vcf(UI_VCF, &filters_library);
-UiFxPage ui_page_fx1(UI_FX1, &effects_library1);
-UiFxPage ui_page_fx2(UI_FX2, &effects_library2);
-UiFxPage ui_page_fx3(UI_FX3, &effects_library3);
-UiFxPage ui_page_fx4(UI_FX4, &effects_library4);
+UiFxPage ui_page_fx1(UI_FX1, &filters_library);
+UiFxPage ui_page_fx2(UI_FX2, &effects_library1);
+UiFxPage ui_page_fx3(UI_FX3, &effects_library2);
+UiFxPage ui_page_fx4(UI_FX4, &effects_library3);
 UiLooperPage ui_page_looper(UI_LOOPER);
 UiModulationPage ui_page_modulation(UI_MODULATION);
+UiParametersPage ui_page_parameters(UI_PARAMETERS);
 UiVolumePage ui_page_volume(UI_VOLUME);
 UiPresetRandomPage ui_page_preset_random(UI_PRESET_RANDOM);
 UiPresetSavePage ui_page_preset_save(UI_PRESET_SAVE);
 UiPresetLoadPage ui_page_preset_load(UI_PRESET_LOAD);
 
-ParameterController parameter_controller(&ui_page_vcf, &ui_page_looper);
+ParameterController parameter_controller(&ui_page_fx1, &ui_page_looper);
 
 }
