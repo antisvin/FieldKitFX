@@ -1,84 +1,11 @@
 #ifndef _ENGINE_WAVEFOLDER_H_
 #define _ENGINE_WAVEFOLDER_H_
 
-#include <algorithm>
-#include <cmath>
+#include "engine/clipping.h"
 
 // Source: https://github.com/fabianesqueda/Agave/blob/master/src/dsp/Waveshaping.hpp
 
 namespace fieldkitfx {
-
-class HardClipper {
-
-    // THIS CLASS IMPLEMENTS AN ANTIALIASED HARD CLIPPING FUNCTION.
-    // THIS CLASS USES THE FIRST-ORDER ANTIDERIVATIVE METHOD.
-
-private:
-    float output = 0.0;
-
-    float xn1 = 0.0;
-    float Fn = 0.0;
-    float Fn1 = 0.0;
-
-    const float thresh = 10.0e-2;
-    const float oneTwelfth = 1.0 / 12.0;
-
-public:
-    HardClipper() {
-    }
-    ~HardClipper() {
-    }
-
-    void process(float input) {
-        output = antialiasedHardClipN1(input);
-    }
-
-    float signum(float x) {
-        return (x > 0.0f) ? 1.0f : ((x < 0.0f) ? -1.0f : 0.0f);
-    }
-
-    float hardClipN0(float x) {
-        // Hard clipping function
-        return 0.5f * (signum(x + 1.0f) * (x + 1.0f) - signum(x - 1.0f) * (x - 1.0f));
-    }
-
-    float hardClipN1(float x) {
-        // First antiderivative of hardClipN0
-        return 0.25f *
-            (signum(x + 1.0f) * (x + 1.0f) * (x + 1.0f) -
-                signum(x - 1.0f) * (x - 1.0f) * (x - 1.0f) - 2.0f);
-    }
-
-    float hardClipN2(float x) {
-        // second antiderivative of hardClipN0
-        return oneTwelfth *
-            (signum(x + 1.0f) * (x + 1.0f) * (x + 1.0f) * (x + 1.0f) -
-                signum(x - 1.0f) * (x - 1.0f) * (x - 1.0f) * (x - 1.0f) - 6.0f * x);
-    }
-
-    float antialiasedHardClipN1(float x) {
-
-        // Hard clipping with 1st-order antialiasing
-        Fn = hardClipN1(x);
-        float tmp = 0.0;
-        if (std::abs(x - xn1) < thresh) {
-            tmp = hardClipN0(0.5f * (x + xn1));
-        }
-        else {
-            tmp = (Fn - Fn1) / (x - xn1);
-        }
-
-        // Update states
-        xn1 = x;
-        Fn1 = Fn;
-
-        return tmp;
-    }
-
-    float getClippedOutput() {
-        return output;
-    }
-};
 
 class Wavefolder {
 
@@ -99,7 +26,7 @@ private:
 
     const float oneSixth = 1.0 / 6.0;
 
-    HardClipper hardClipper;
+    HardClipper clipper;
 
 public:
     Wavefolder() {
@@ -113,17 +40,17 @@ public:
 
     float foldFunctionN0(float x) {
         // Folding function
-        return (2.0f * hardClipper.hardClipN0(x) - x);
+        return (2.0f * clipper.clipN0(x) - x);
     }
 
     float foldFunctionN1(float x) {
         // First antiderivative of the folding function
-        return (2.0f * hardClipper.hardClipN1(x) - 0.5f * x * x);
+        return (2.0f * clipper.clipN1(x) - 0.5f * x * x);
     }
 
     float foldFunctionN2(float x) {
         // Second antiderivative of the folding function
-        return (2.0f * hardClipper.hardClipN2(x) - oneSixth * (x * x * x));
+        return (2.0f * clipper.clipN2(x) - oneSixth * (x * x * x));
     }
 
     float antialiasedFoldN1(float x) {
@@ -181,67 +108,6 @@ public:
         xn1 = x;
 
         return tmp;
-    }
-};
-
-class SoftClipper {
-
-    // THIS CLASS IMPLEMENTS A PIECEWISE SOFT SATURATOR WITH
-    // FIRST-ORDER ANTIDERIVATIVE ANTIALIASING.
-
-private:
-    float output = 0.0;
-
-    // Antialiasing variables
-    float xn1 = 0.0;
-    float Fn = 0.0;
-    float Fn1 = 0.0;
-    const float thresh = 10.0e-2;
-
-public:
-    SoftClipper() {
-    }
-    ~SoftClipper() {
-    }
-
-    void process(float input) {
-        output = antialiasedSoftClipN1(input);
-    }
-
-    float signum(float x) {
-        return (x > 0.0f) ? 1.0f : ((x < 0.0f) ? -1.0f : 0.0f);
-    }
-
-    float softClipN0(float x) {
-        return (std::abs(x) < 1) ? std::sin(0.5f * M_PI * x) : signum(x);
-    }
-
-    float softClipN1(float x) {
-
-        return (std::abs(x) < 1) ? 1.0f - (2.0f / M_PI) * cos(x * 0.5f * M_PI)
-                                 : signum(x) * x;
-    }
-
-    float antialiasedSoftClipN1(float x) {
-
-        Fn = softClipN1(x);
-        float tmp = 0.0;
-        if (std::abs(x - xn1) < thresh) {
-            tmp = softClipN0(0.5f * (x + xn1));
-        }
-        else {
-            tmp = (Fn - Fn1) / (x - xn1);
-        }
-
-        // Update states
-        xn1 = x;
-        Fn1 = Fn;
-
-        return tmp;
-    }
-
-    float getClippedOutput() {
-        return output;
     }
 };
 

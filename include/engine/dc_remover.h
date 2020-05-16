@@ -19,7 +19,8 @@ private:
     DISALLOW_COPY_AND_ASSIGN(DCRemover);
 
 public:
-    // DCRemover(){};
+    DCRemover()
+        : DCRemover(0.995) {};
     DCRemover(float pole);
     void process(float& inputSample);
 };

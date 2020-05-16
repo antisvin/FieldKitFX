@@ -12,9 +12,11 @@
 #include "dsp/frequency_shifter.h"
 #include "dsp/ms20.h"
 #include "dsp/oberheim.h"
+#include "dsp/overdrive.h"
 #include "dsp/phaser.h"
 #include "dsp/triple_peaks.h"
 #include "dsp/tz_flanger.h"
+#include "dsp/waveshaper.h"
 #include "utils/moving_average_filter.h"
 #include "utils/utils.h"
 
@@ -46,7 +48,7 @@ class EffectsLibraryBase {
 public:
     static constexpr uint8_t num_effects = 5;
     DspEffect* effects[num_effects];
-    EffectAlgo algo;
+    uint8_t algo_id;
     bool refreshUi = true;
     DspParam param1, param2;
 
@@ -54,7 +56,7 @@ public:
     void updateParams();
     void process(const float* in, float* out);
     DspEffect* getCurrentEffect() {
-        return effects[algo];
+        return effects[algo_id];
     }
 };
 
@@ -83,14 +85,16 @@ class EffectsLibraryNoMemory : public EffectsLibraryBase {
 public:
     EffectsLibraryNoMemory() {
         effects[0] = &bypass;
-        effects[1] = &bypass;
-        effects[2] = &bypass;
+        effects[1] = &overdrive;
+        effects[2] = &waveshaper;
         effects[3] = &bypass;
         effects[4] = &bypass;
     }
 
 private:
     BypassEffect bypass;
+    OverdriveEffect overdrive;
+    WaveshaperEffect waveshaper;
     DISALLOW_COPY_AND_ASSIGN(EffectsLibraryNoMemory);
 };
 

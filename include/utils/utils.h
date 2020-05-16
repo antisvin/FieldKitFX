@@ -72,4 +72,27 @@ inline float mydsp_faustpower2_f(float value) {
     void operator=(const TypeName&) = delete;
 */
 
+inline float interpolate_wave(
+    const int16_t* table, int32_t index_integral, float index_fractional) {
+    float a = static_cast<float>(table[index_integral]);
+    float b = static_cast<float>(table[index_integral + 1]);
+    float t = index_fractional;
+    return a + (b - a) * t;
+}
+
+inline float interpolate_wave_hermite(
+    const int16_t* table, int32_t index_integral, float index_fractional) {
+    const float xm1 = table[index_integral];
+    const float x0 = table[index_integral + 1];
+    const float x1 = table[index_integral + 2];
+    const float x2 = table[index_integral + 3];
+    const float c = (x1 - xm1) * 0.5f;
+    const float v = x0 - x1;
+    const float w = c + v;
+    const float a = w + v + (x2 - x0) * 0.5f;
+    const float b_neg = w + a;
+    const float f = index_fractional;
+    return (((a * f) - b_neg) * f + c) * f + x0;
+}
+
 #endif /* RANDOMUTILS_H_ */

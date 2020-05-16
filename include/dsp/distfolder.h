@@ -21,39 +21,21 @@ public:
 
     void process(const float* in, float* out) override {
         for (size_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
-            lfo.update();
-            float tmp = ap.Allpass(in[i], 1.0f, depth);
+            float tmp = ap.Allpass(in[i], 0.0f, ap_coef);
             out[i] = wavefolder.process(tmp * gain);
         }
     };
 
     void updateParams(const DspParam* param1, const DspParam* param2) {
-        // offset = param1->asFloat() / 4095.0;
-        depth = param1->asFloat() / ADC_RESOLUTION_DEZ;
-        /*
-        float lfo_param = param1->asFloat() / ADC_RESOLUTION_DEZ;
-        if (lfo_param <= 0.5) {
-            // CCW turn - constant rate, mod depth decreasing
-            lfo.setFreq(1.0);
-            depth = lfo_param * 2.0;
-        }
-        else {
-            // Constant mod depth, rate increasing
-            lfo.setFreq(lfo_param * 50.0 - 24);
-            depth = 1.0;
-        }
-        // ap_delay = depth * (lfo.sineOut * 0.499 + 0.5);
-        */
-
+        ap_coef = param1->asFloat() / ADC_RESOLUTION_DEZ;
         gain = param2->asFloat() * (max_gain - 1) / ADC_RESOLUTION_DEZ + 1;
     };
 
 private:
     Wavefolder wavefolder;
     DelayLine<float, 1> ap;
-    SineOscillator lfo;
     static constexpr uint8_t max_gain = 6;
-    float gain, depth;
+    float gain, ap_coef;
 };
 
 };

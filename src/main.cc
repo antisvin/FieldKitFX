@@ -119,7 +119,7 @@ int main(void) {
 
             effects_library1.process(tmp_buffer1, tmp_buffer2);
             effects_library2.process(tmp_buffer2, tmp_buffer1);
-            effects_library2.process(tmp_buffer1, tmp_buffer2);
+            effects_library3.process(tmp_buffer1, tmp_buffer2);
 
             // apply the looper effects
             // looper.process(tmp_buffer1, user_audio_out_buffer.buffer);
