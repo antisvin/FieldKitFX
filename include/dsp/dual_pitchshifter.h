@@ -29,7 +29,7 @@ public:
         for (int i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
             float sample_a = pc[0].process(in[i]);
             float sample_b = pc[1].process(in[i]);
-            out[i] = (in[i] + sample_a + sample_b) * 0.33333;
+            out[i] = (sample_a + sample_b) * 0.5;
         }
     }
 
