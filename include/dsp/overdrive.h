@@ -13,8 +13,7 @@ public:
 
     void process(const float* in, float* out) override {
         for (size_t i = 0; i < USER_AUDIO_IO_BUFFER_SIZE; i++) {
-            out[i] = hard_clipper.process(in[i] * gain + offset);
-            dc.process(out[i]);
+            out[i] = dc.process(hard_clipper.process(in[i] * gain + offset));
         }
     }
 

@@ -14,9 +14,6 @@ constexpr int16_t bitcrusher_upper_limit = 10;
 constexpr uint8_t decimation_factors[7] = { 1, 2, 4, 8, 16, 32, 64 };
 
 class DecimatorEffect : public DspEffect {
-private:
-    float bit_reduction, decimation_factor;
-
 public:
     void process(const float* in, float* out) override {
         //        uint8_t bit_reduction_int = static_cast<uint8_t>(bit_reduction);
@@ -62,6 +59,9 @@ public:
         bit_reduction =
             (logLUT_12bit[param2->last_result & 0xfff] * (16.0 - min_bitdepth)) / 4095.0;
     }
+
+private:
+    float bit_reduction, decimation_factor;
 };
 
 } // namespace fieldkitfx

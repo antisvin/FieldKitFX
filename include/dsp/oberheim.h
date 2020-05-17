@@ -2,11 +2,11 @@
 #define _FILTERS_OBERHEIM_H_
 
 #include <cmath>
-#include "dsp/dsp.h"
+#include "engine/filters.h"
 
 namespace fieldkitfx {
 
-class OberheimSvfFilter : public DspEffect {
+class OberheimSvfFilter : public BaseFilterEffect {
 
 public:
     OberheimSvfFilter() {
@@ -39,8 +39,9 @@ public:
             float fRec2 = fTemp3;
             fRec3[0] = (fRec3[1] + (fSlow8 * fTemp3));
             fRec4[0] = (fTemp1 + fTemp3);
-            output[i] = float((iSlow1 ? ((fSlow10 * fRec2) + (fSlow11 * fRec0))
-                                      : ((fSlow2 * fRec2) + (fSlow9 * fRec1))));
+            output[i] =
+                clipper.process((iSlow1 ? ((fSlow10 * fRec2) + (fSlow11 * fRec0))
+                                        : ((fSlow2 * fRec2) + (fSlow9 * fRec1))));
             fRec3[1] = fRec3[0];
             fRec4[1] = fRec4[0];
         }

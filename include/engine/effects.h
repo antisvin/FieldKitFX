@@ -7,6 +7,7 @@
 #include "dsp/chorus.h"
 #include "dsp/comb_filter.h"
 #include "dsp/decimator.h"
+#include "dsp/dual_pitchshifter.h"
 #include "dsp/distfolder.h"
 #include "dsp/formants.h"
 #include "dsp/frequency_shifter.h"
@@ -127,7 +128,8 @@ public:
         effects[1] = &barberpole_phaser;
         effects[2] = &tz_flanger;
         effects[3] = &comb;
-        effects[4] = &chorus;
+        effects[4] = &dual_pitchshifter;
+        //        effects[4] = &chorus;
         SharedBuffer<2048>::initBuffer<DspEffect>(effects);
     };
 
@@ -136,7 +138,8 @@ private:
     BarberpolePhaserEffect barberpole_phaser;
     TzFlangerEffect tz_flanger;
     CombFilterEffect comb;
-    ChorusEffect chorus;
+    DualPitchshifterEffect dual_pitchshifter;
+    //    ChorusEffect chorus;
 
     DISALLOW_COPY_AND_ASSIGN(EffectsLibraryLargeMemory);
 };

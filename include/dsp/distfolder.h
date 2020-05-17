@@ -27,7 +27,7 @@ public:
     };
 
     void updateParams(const DspParam* param1, const DspParam* param2) {
-        ap_coef = param1->asFloat() / ADC_RESOLUTION_DEZ;
+        ap_coef = param1->asFloat() / ADC_RESOLUTION_DEZ * 0.5 + 0.5;
         gain = param2->asFloat() * (max_gain - 1) / ADC_RESOLUTION_DEZ + 1;
     };
 

@@ -2,7 +2,7 @@
 #define _DSP_FORMANTS_H_
 
 #include <cmath>
-#include "dsp/dsp.h"
+#include "engine/filters.h"
 
 namespace fieldkitfx {
 #if 0
@@ -31,7 +31,7 @@ static const uint8_t formants_map[25] { voice_type_0 | vowel_a,
     voice_type_4 | vowel_c, voice_type_4 | vowel_d, voice_type_4 | vowel_e };
 #endif
 
-class FormantFilter : public DspEffect {
+class FormantFilter : public BaseFilterEffect {
 public:
     FormantFilter() {
     }
@@ -773,13 +773,8 @@ public:
                              ((fRec1[0] * fSlow95) / fSlow96))) +
                         ((fRec0[0] * fSlow72) / fSlow73)))) *
                 0.25f;
-            if (fabsf(out) >= 1.0f) {
-                out = copysign(2.0f / 3.0f, out);
-            }
-            else {
-                out = out - out * out * out / 3.0f;
-            }
-            output[i] = out * 1.4f;
+
+            output[i] = clipper.process(out);
 
             fRec0[2] = fRec0[1];
             fRec0[1] = fRec0[0];

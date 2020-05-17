@@ -11,7 +11,7 @@ namespace fieldkitfx {
 // Source: https://github.com/fabianesqueda/Agave/blob/master/src/dsp/Waveshaping.hpp
 
 /*
-Other clipping algos:
+Other clipping algos we could try:
 
 Tangential soft clipper:
 F0(x) = tanh(x)
@@ -36,7 +36,7 @@ Two stage quadratic soft clipper
 1/3 <= |x| <= 2/3 -> sgn(x) * (3 - (2 - |3 * x|) ** 2) / 3
 - 1/3 < x < 1/3 -> 2 * x
 
-Cubic (alt version):
+Cubic:
 |x| > 2/3 -> sgn(x)
 else -> 9 * x / 4 - 27 * (x ** 3) / 16
 
@@ -101,15 +101,24 @@ public:
         else {
             return signum(x);
         }
+        /*
+        if (std::abs(x) < 1) {
+            return (1.5f - 0.5f * x * x) * x;
+        }
+        else {
+            return signum(x);
+        }
+        */
     }
 
     float clipN1(float x) override {
         if (std::abs(x) < 1) {
             float sqr_x = x * x;
-            return (0.75f - 0.125f * sqr_x) * sqr_x;
+            // return (0.75f - 0.125f * sqr_x) * sqr_x;
+            return sqr_x * x - 0.05 * sqr_x * sqr_x * x;
         }
         else {
-            return 0.5 * signum(x) * x;
+            return signum(x) * x;
         }
     }
 
@@ -121,6 +130,33 @@ public:
         else {
             return onesixths * signum(x) * x * x;
         }
+    }
+};
+
+class SineClipper : public BaseClipper {
+public:
+    float clipN0(float x) override {
+        if (std::abs(x) < 1) {
+            return std::sin(0.5 * M_PI * x);
+        }
+        else {
+            return signum(x);
+        }
+
+        // else -> sin(3 * PI * x / 4)
+    }
+
+    float clipN1(float x) override {
+        if (std::abs(x) < 1) {
+            return 2.0 / M_PI - (2.0f / M_PI) * std::cos(0.5 * M_PI * x);
+        }
+        else {
+            return signum(x);
+        }
+    }
+
+    float clipN2(float x) override {
+        // second antiderivative of hardClipN0
     }
 };
 
@@ -148,7 +184,6 @@ public:
 private:
     static constexpr float oneTwelfth = 1.0 / 12.0;
 };
-
 }
 
 #endif

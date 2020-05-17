@@ -2,15 +2,14 @@
 #define _FILTERS_MS20_H_
 
 #include <cmath>
-#include "dsp/dsp.h"
+#include "engine/filters.h"
 
 namespace fieldkitfx {
 
-class Ms20Filter : public DspEffect {
+class Ms20Filter : public BaseFilterEffect {
 
 public:
-    Ms20Filter() {
-    }
+    Ms20Filter() = default;
 
     void process(const float* input, float* output) {
         float fSlow0 = std::tan((fConst0 * std::pow(10.0f, ((3 * fc) + 1.0f))));
@@ -38,14 +37,7 @@ public:
             fRec2[0] = (fRec2[1] + (fSlow9 * ((fSlow10 * fTemp2) - fRec2[1])));
             fRec3[0] = (fRec3[1] + (fSlow9 * fTemp0));
 
-            if (fabsf(fRec0) >= 1.0f) {
-                fRec0 = copysign(2.0f / 3.0f, fRec0);
-            }
-            else {
-                fRec0 = fRec0 - fRec0 * fRec0 * fRec0 / 3.0f;
-            }
-
-            output[i] = fRec0 * 1.4f;
+            output[i] = clipper.process(fRec0);
             fRec1[1] = fRec1[0];
             fRec2[1] = fRec2[0];
             fRec3[1] = fRec3[0];

@@ -22,7 +22,7 @@ public:
     DCRemover()
         : DCRemover(0.995) {};
     DCRemover(float pole);
-    void process(float& inputSample);
+    float process(const float in);
 };
 
 /*
