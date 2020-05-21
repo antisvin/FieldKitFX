@@ -38,7 +38,7 @@ public:
             // float wave_a = InterpolateWave(
             //    table_a, lookup_index_integral, lookup_index_fractional);
             out[i] = // wave_a / 32767;
-                Crossfade(wave_a, wave_b, mix) / 32767;
+                Crossfade(wave_a, wave_b, mix) * 0.9f / 32767;
         }
     }
 

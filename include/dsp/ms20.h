@@ -37,7 +37,7 @@ public:
             fRec2[0] = (fRec2[1] + (fSlow9 * ((fSlow10 * fTemp2) - fRec2[1])));
             fRec3[0] = (fRec3[1] + (fSlow9 * fTemp0));
 
-            output[i] = clipper.process(fRec0);
+            output[i] = clipper.process(fRec0) * 0.9;
             fRec1[1] = fRec1[0];
             fRec2[1] = fRec2[0];
             fRec3[1] = fRec3[0];

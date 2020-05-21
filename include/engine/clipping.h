@@ -92,15 +92,48 @@ protected:
     }
 };
 
+class QuadraticClipper : public BaseClipper {
+public:
+    float clipN0(float x) override {
+        if (std::abs(x) < 1) {
+            return x * std::abs(x);
+        }
+        else {
+            return signum(x);
+        }
+    }
+
+    float clipN1(float x) override {
+        if (std::abs(x) < 1) {
+            return std::abs(x) * x * x / 3.0f;
+        }
+        else {
+            return std::abs(x);
+        }
+    }
+    float clipN2(float x) override {
+        if (std::abs(x) < 1) {
+            return std::abs(x) * x * x * x / 12.0f;
+        }
+        else {
+            return 0.5 * x * std::abs(x);
+        }
+    }
+};
+
 class CubicClipper : public BaseClipper {
 public:
     float clipN0(float x) override {
+        float t = signum(x + 1.0f) * (x + 1.0f) - signum(x - 1.0f) * (x - 1.0f);
+        return t * (0.75 - 0.0625 * t * t);
+        /*
         if (std::abs(x) < 1) {
             return (1.5f - 0.5f * x * x) * x;
         }
         else {
             return signum(x);
         }
+        */
         /*
         if (std::abs(x) < 1) {
             return (1.5f - 0.5f * x * x) * x;
@@ -112,10 +145,14 @@ public:
     }
 
     float clipN1(float x) override {
+        // float t1 = signum(x + 1.0f) * (x + 1.0f) * (x + 1.0f);
+        // float t2 = signum(x + 1.0f) * (x + 1.0f) * (x - 1.0f);
+        // return 0.375 * (t1 - t2) - 0.0375 * (t1 - t2) * (t1 - t2) * (t1 - t2);
+
         if (std::abs(x) < 1) {
             float sqr_x = x * x;
-            // return (0.75f - 0.125f * sqr_x) * sqr_x;
-            return sqr_x * x - 0.05 * sqr_x * sqr_x * x;
+            return (0.75f - 0.125f * sqr_x) * sqr_x;
+            /// return sqr_x * x - 0.05 * sqr_x * sqr_x * x;
         }
         else {
             return signum(x) * x;
@@ -136,23 +173,37 @@ public:
 class SineClipper : public BaseClipper {
 public:
     float clipN0(float x) override {
+        return std::sin(-M_PI -
+            0.25f * M_PI * (signum(x + 1) * (x + 1) - signum(x - 1) * (x - 1)));
+
+        /*
         if (std::abs(x) < 1) {
-            return std::sin(0.5 * M_PI * x);
+            //return Interpolate(sineWT, 0.5f - 0.25f * x, 1024.0f);
+            // return std::sin(0.5 * M_PI * x);
         }
         else {
             return signum(x);
         }
+        */
 
         // else -> sin(3 * PI * x / 4)
     }
 
     float clipN1(float x) override {
+        return 4 / M_PI +
+            4 / M_PI *
+            std::cos(-M_PI -
+                0.25f * M_PI * (signum(x + 1) * (x + 1) - signum(x - 1) * (x - 1)));
+        /*
         if (std::abs(x) < 1) {
-            return 2.0 / M_PI - (2.0f / M_PI) * std::cos(0.5 * M_PI * x);
+            return 2.0 / M_PI -
+                (2.0f / M_PI) * Interpolate(cosineWT, 0.5f - x * 0.25f, 1024.0f);
+            // return 2.0 / M_PI - (2.0f / M_PI) * std::cos(0.5 * M_PI * x);
         }
         else {
-            return signum(x);
+            return signum(x) * x;
         }
+        */
     }
 
     float clipN2(float x) override {

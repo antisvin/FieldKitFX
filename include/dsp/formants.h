@@ -751,7 +751,7 @@ public:
         float fSlow133 = (fSlow126 * fSlow131);
         float fSlow134 = (0.0f - (fSlow132 / fSlow133));
         for (int i = 0; (i < USER_AUDIO_IO_BUFFER_SIZE); i = (i + 1)) {
-            float fTemp0 = float(input[i]);
+            float fTemp0 = float(input[i]) * 0.5;
             fRec0[0] = (fTemp0 -
                 (((fRec0[2] * fSlow62) + (2.0f * (fRec0[1] * fSlow63))) / fSlow64));
             fRec1[0] = (fTemp0 -
@@ -774,7 +774,7 @@ public:
                         ((fRec0[0] * fSlow72) / fSlow73)))) *
                 0.25f;
 
-            output[i] = clipper.process(out);
+            output[i] = clipper.process(out) * 0.9;
 
             fRec0[2] = fRec0[1];
             fRec0[1] = fRec0[0];

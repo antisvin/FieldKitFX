@@ -41,7 +41,8 @@ public:
             fRec4[0] = (fTemp1 + fTemp3);
             output[i] =
                 clipper.process((iSlow1 ? ((fSlow10 * fRec2) + (fSlow11 * fRec0))
-                                        : ((fSlow2 * fRec2) + (fSlow9 * fRec1))));
+                                        : ((fSlow2 * fRec2) + (fSlow9 * fRec1)))) *
+                0.9;
             fRec3[1] = fRec3[0];
             fRec4[1] = fRec4[0];
         }

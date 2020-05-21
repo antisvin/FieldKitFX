@@ -4,7 +4,6 @@
 //#include "dsp/allpass_filter.h"
 #include "dsp/barberpole_phaser.h"
 #include "dsp/bypass.h"
-#include "dsp/chorus.h"
 #include "dsp/comb_filter.h"
 #include "dsp/decimator.h"
 #include "dsp/dual_pitchshifter.h"
@@ -15,6 +14,7 @@
 #include "dsp/oberheim.h"
 #include "dsp/overdrive.h"
 #include "dsp/phaser.h"
+#include "dsp/short_delay.h"
 #include "dsp/triple_peaks.h"
 #include "dsp/tz_flanger.h"
 #include "dsp/waveshaper.h"
@@ -22,15 +22,6 @@
 #include "utils/utils.h"
 
 namespace fieldkitfx {
-
-enum EffectAlgo {
-    DSP_BYPASS = 0,
-    DSP_BARBERPOLE_PHASER,
-    DSP_TZ_FLANGER,
-    DSP_PHASER,
-    DSP_CHORUS,
-    DSP_DECIMATOR,
-};
 
 template <size_t shared_buffer_size>
 class SharedBuffer {
@@ -121,21 +112,23 @@ private:
 };
 
 class EffectsLibraryLargeMemory : public EffectsLibraryBase,
-                                  public SharedBuffer<2048> {
+                                  public SharedBuffer<8192> {
 public:
     EffectsLibraryLargeMemory() {
         effects[0] = &bypass;
-        effects[1] = &barberpole_phaser;
+        effects[1] = &short_delay;
+        // effects[1] = &barberpole_phaser;
         effects[2] = &tz_flanger;
         effects[3] = &comb;
         effects[4] = &dual_pitchshifter;
         //        effects[4] = &chorus;
-        SharedBuffer<2048>::initBuffer<DspEffect>(effects);
+        SharedBuffer<8192>::initBuffer<DspEffect>(effects);
     };
 
 private:
     BypassEffect bypass;
-    BarberpolePhaserEffect barberpole_phaser;
+    ShortDelayEffect short_delay;
+    // BarberpolePhaserEffect barberpole_phaser;
     TzFlangerEffect tz_flanger;
     CombFilterEffect comb;
     DualPitchshifterEffect dual_pitchshifter;

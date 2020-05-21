@@ -62,7 +62,7 @@ public:
             float out = float(
                 (fTemp10 * (1.0f - (0.333333343f * mydsp_faustpower2_f(fTemp10)))));
 
-            output[i] = clipper.process(out);
+            output[i] = clipper.process(out) * 0.9;
 
             fRec1[1] = fRec1[0];
             fRec2[1] = fRec2[0];

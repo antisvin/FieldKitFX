@@ -15,7 +15,7 @@ public:
     ~DelayLine() {
     }
 
-    void Init(float* buffer) {
+    void Init(T* buffer) {
         line_ = buffer;
         // There's no need to reset here - it will be zero-filled already
         // and we reuse the same buffer for multiple effects.
