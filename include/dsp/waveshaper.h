@@ -12,9 +12,7 @@ namespace fieldkitfx {
 using namespace stmlib;
 
 static constexpr uint16_t arcsin_lut_size = 256;
-static constexpr uint16_t wavetable_size = 256;
-static constexpr uint16_t wavetable_size_full = 260;
-static constexpr uint16_t wavetable_half { wavetable_size / 2 };
+static constexpr uint16_t wavetable_half { wavetable_lut_size / 2 };
 
 class WaveshaperEffect : public DspEffect {
 

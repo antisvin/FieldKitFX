@@ -26,6 +26,18 @@ inline float clip(float input) {
         return input;
 }
 
+inline float clip_positive(float input) {
+    if (input > 1.0f) {
+        return 1.0f;
+    }
+    else if (input < 0.0f) {
+        return 0.0f;
+    }
+    else {
+        return input;
+    }
+}
+
 /*
  * scales an unsigned 12bit signal to a float [-1.0,1.0]
  */
@@ -59,7 +71,6 @@ inline int16_t scale_float_to_int16(float input) {
 inline float crossfade(float a, float b, float fade) {
     return a * fade + b * (1 - fade);
 }
-
 }
 
 inline float mydsp_faustpower2_f(float value) {

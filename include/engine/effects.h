@@ -14,6 +14,7 @@
 #include "dsp/oberheim.h"
 #include "dsp/overdrive.h"
 #include "dsp/phaser.h"
+#include "dsp/pll.h"
 #include "dsp/short_delay.h"
 #include "dsp/triple_peaks.h"
 #include "dsp/tz_flanger.h"
@@ -80,13 +81,14 @@ public:
         effects[1] = &overdrive;
         effects[2] = &waveshaper;
         effects[3] = &bypass;
-        effects[4] = &bypass;
+        effects[4] = &pll;
     }
 
 private:
     BypassEffect bypass;
     OverdriveEffect overdrive;
     WaveshaperEffect waveshaper;
+    PllEffect pll;
     DISALLOW_COPY_AND_ASSIGN(EffectsLibraryNoMemory);
 };
 

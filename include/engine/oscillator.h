@@ -33,6 +33,13 @@ private:
     DISALLOW_COPY_AND_ASSIGN(OscillatorBase);
 };
 
+class Phasor : public OscillatorBase {
+public:
+    float phaseOut;
+
+    void update(void);
+};
+
 class SineOscillator : public OscillatorBase {
 public:
     float sineOut;

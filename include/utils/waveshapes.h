@@ -5,6 +5,9 @@
 
 namespace fieldkitfx {
 
+constexpr uint16_t wavetable_lut_size = 256;
+constexpr uint16_t wavetable_size_full { wavetable_lut_size + 4 };
+
 const int16_t wavetables_lut[] = {
 
     15656, 15656, 15656, 15656, 15656, 15656, 15656, 15656, 15656, 15656, 15656,

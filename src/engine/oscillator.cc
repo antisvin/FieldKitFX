@@ -28,6 +28,16 @@ void OscillatorBase::setFreq(float freq) {
     }
 }
 
+void Phasor::update() {
+    if (freq_neg) {
+        phaseAcc -= increment;
+    }
+    else {
+        phaseAcc += increment;
+    };
+    phaseOut = (float)phaseAcc / OSC_OVF_VALUE;
+}
+
 void SawOscillator::update() {
     if (freq_neg) {
         phaseAcc -= increment;
