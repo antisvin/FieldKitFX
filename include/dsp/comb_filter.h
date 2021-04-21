@@ -9,8 +9,6 @@ namespace fieldkitfx {
 
 class CombFilterEffect : public DspEffect {
 public:
-    float delay, feedback;
-
     CombFilterEffect() = default;
 
     void init(float* buffer) {
@@ -46,6 +44,7 @@ public:
     }
 
 private:
+    float delay, feedback;
     DelayLine<float, large_buffer_size> delay_line;
     DISALLOW_COPY_AND_ASSIGN(CombFilterEffect);
 };
