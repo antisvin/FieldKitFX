@@ -10,26 +10,16 @@
 #define FRAME_H_
 
 #include "utils/utils.h"
-
-// based on USER_AUDIO_IO_BUFFER_SIZE=24 and 2 samples per block
-#define BLOCKS_PER_FRAME 12
-#define BLOCK_SIZE 3
+#include "engine/audio_buffers.h"
 
 namespace fieldkitfx {
-
-constexpr uint8_t FRAME_BYTECOUNT = BLOCK_SIZE * BLOCKS_PER_FRAME;
-
-struct SampleBlock {
-    uint8_t nibbleByte;
-    uint8_t lesser_samples[2];
-};
 
 class Frame {
 private:
     DISALLOW_COPY_AND_ASSIGN(Frame);
 
 public:
-    SampleBlock samples[BLOCKS_PER_FRAME];
+    uint8_t samples[USER_AUDIO_IO_BUFFER_SIZE];
 
     Frame() = default;
 

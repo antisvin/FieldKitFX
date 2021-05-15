@@ -15,10 +15,35 @@ License
 
 The code in this repository is licensed under the GNU General Public License v3.0.
 
+Third party code:
+
+- Koma Electronics - original firmware
+- Emilie Gillette - delay line, muLaw codec, filterbank
+- Martin Klank - fast maths functions, SVF implementation
+
 UI changes
 ==========
 
 This firmware decouples FX selection from looper control, so upper switch toggles looper control and FX selection modes. We also have more effects now.
+
+
+SVF filter slot
+~~~~~~~~~~~~~~~
+
+    * Cyan - low pass
+    * Purple - hi pass
+    * Lime - band pass
+    * Orange - notch
+    * Blue - peak
+    * Magenta - bell
+    * Green - low shelf
+    * Red - high shelf
+
+All filter outputs use control1 to set cutoff frequency, control 2 to set Q.
+
+Effect slot
+~~~~~~~~~~~
+
 
 Barberpole phaser
 -----------------

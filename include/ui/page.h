@@ -95,10 +95,10 @@ public:
     };
 };
 
-class UiFxPage : public StatefulUiPage<COL_ORANGE> {
+class UiFxPage : public StatefulUiPage<COL_RED> {
 public:
     UiFxPage(UiPageId page_id, EffectsLibraryBase* effects_library)
-        : StatefulUiPage<COL_ORANGE>(page_id, effects_library) {};
+        : StatefulUiPage(page_id, effects_library) {};
 
     void onButtonPressed() override;
 

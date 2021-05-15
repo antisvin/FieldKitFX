@@ -124,7 +124,7 @@ int main(void) {
             // apply the looper effects
             // looper.process(tmp_buffer1, user_audio_out_buffer.buffer);
             looper.process(tmp_buffer2, user_audio_out_buffer.buffer);
-            user_audio_out_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
+            // user_audio_out_buffer.index = USER_AUDIO_IO_BUFFER_SIZE;
 
             parameter_controller.updateParams2();
         }

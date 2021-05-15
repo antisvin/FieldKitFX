@@ -8,15 +8,12 @@
 #include "dsp/decimator.h"
 #include "dsp/dual_pitchshifter.h"
 #include "dsp/distfolder.h"
-#include "dsp/formants.h"
 #include "dsp/frequency_shifter.h"
-#include "dsp/ms20.h"
-#include "dsp/oberheim.h"
 #include "dsp/overdrive.h"
 #include "dsp/phaser.h"
 #include "dsp/pll.h"
 #include "dsp/short_delay.h"
-#include "dsp/triple_peaks.h"
+#include "dsp/svf.h"
 #include "dsp/tz_flanger.h"
 #include "dsp/waveshaper.h"
 #include "utils/moving_average_filter.h"
@@ -39,13 +36,13 @@ public:
 
 class EffectsLibraryBase {
 public:
-    static constexpr uint8_t num_effects = 5;
+    static constexpr uint8_t num_effects = 9;
     DspEffect* effects[num_effects];
     uint8_t algo_id;
     bool refreshUi = true;
     DspParam param1, param2;
 
-    void setAlgo(uint8_t algo_id);
+    virtual void setAlgo(uint8_t algo_id);
     void updateParams();
     void process(const float* in, float* out);
     DspEffect* getCurrentEffect() {
@@ -55,21 +52,27 @@ public:
 
 class FiltersLibrary : public EffectsLibraryBase {
 public:
-    static constexpr uint8_t num_effects = 5;
     FiltersLibrary() {
         effects[0] = &bypass;
-        effects[1] = &ms20;
-        effects[2] = &oberheim_svf;
-        effects[3] = &triple_peaks;
-        effects[4] = &formant;
+        effects[1] = &svf;
+        effects[2] = &svf;
+        effects[3] = &svf;
+        effects[4] = &svf;
+        effects[5] = &svf;
+        effects[6] = &svf;
+        effects[7] = &svf;
+        effects[8] = &svf;
+    }
+    void setAlgo(uint8_t algo_id) override {
+        EffectsLibraryBase::setAlgo(algo_id);
+        if (algo_id) {
+            svf.setMode(StateVariableFilter::Mode(algo_id - 1));
+        }
     }
 
 private:
     BypassEffect bypass;
-    Ms20Filter ms20;
-    OberheimSvfFilter oberheim_svf;
-    TriplePeaksFilter triple_peaks;
-    FormantFilter formant;
+    StateVariableFilterEffect svf;
 
     DISALLOW_COPY_AND_ASSIGN(FiltersLibrary);
 };
@@ -79,16 +82,16 @@ public:
     EffectsLibraryNoMemory() {
         effects[0] = &bypass;
         effects[1] = &overdrive;
-        effects[2] = &waveshaper;
+        effects[2] = &bypass;
         effects[3] = &bypass;
-        effects[4] = &pll;
+        effects[4] = &bypass;
     }
 
 private:
     BypassEffect bypass;
     OverdriveEffect overdrive;
-    WaveshaperEffect waveshaper;
-    PllEffect pll;
+    // WaveshaperEffect waveshaper;
+    // PllEffect pll;
     DISALLOW_COPY_AND_ASSIGN(EffectsLibraryNoMemory);
 };
 

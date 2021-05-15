@@ -53,6 +53,12 @@ public:
         return antialiasedClipN1(input);
     }
 
+    void process(const float* input, float* output, size_t size) {
+        while (size--) {
+            *output++ = antialiasedClipN1(*input++);
+        }
+    }
+
     void reset() {
         xn1 = 0.0f;
         Fn = 0.0f;

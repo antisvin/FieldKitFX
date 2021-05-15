@@ -76,7 +76,7 @@ void Memory_flushSPIFIFO(SPI_HandleTypeDef* spiController) {
 }
 
 void RamChip::setCS(uint8_t state) {
-    if(state)
+    if (state)
         HAL_GPIO_WritePin(CSGPIOPort, CSPinNumber, GPIO_PIN_SET);
     else
         HAL_GPIO_WritePin(CSGPIOPort, CSPinNumber, GPIO_PIN_RESET);
@@ -140,36 +140,13 @@ void RamChip::read(uint32_t startAddress, uint8_t* data, uint32_t size) {
 }
 
 void RamChip::read(uint16_t frameNumber, Frame* frame) {
-    uint8_t buffer[FRAME_BYTECOUNT];
-
-    // calculate the address to start reading at
-    // get 25 bytes from that address
-    read(frameNumber * FRAME_BYTECOUNT, buffer, FRAME_BYTECOUNT);
-    // format the bytes to make a frame (populate the blocks)
-    for(uint8_t block_counter = 0; block_counter < BLOCKS_PER_FRAME; block_counter++) {
-        frame->samples[block_counter].nibbleByte = buffer[block_counter * BLOCK_SIZE];
-        frame->samples[block_counter].lesser_samples[0] =
-            buffer[block_counter * BLOCK_SIZE + 1];
-        frame->samples[block_counter].lesser_samples[1] =
-            buffer[block_counter * BLOCK_SIZE + 2];
-    }
+    read(frameNumber * USER_AUDIO_IO_BUFFER_SIZE, frame->samples,
+        USER_AUDIO_IO_BUFFER_SIZE);
 }
 
 void RamChip::write(uint16_t frameNumber, Frame* frame) {
-    uint8_t buffer[FRAME_BYTECOUNT];
-
-    // format the bytes to make a frame (populate the blocks)
-    for(uint8_t block_counter = 0; block_counter < BLOCKS_PER_FRAME; block_counter++) {
-        buffer[block_counter * BLOCK_SIZE] = frame->samples[block_counter].nibbleByte;
-        buffer[block_counter * BLOCK_SIZE + 1] =
-            frame->samples[block_counter].lesser_samples[0];
-        buffer[block_counter * BLOCK_SIZE + 2] =
-            frame->samples[block_counter].lesser_samples[1];
-    }
-
-    // calculate the address to start reading at
-    // write the 25 bytes of the buffer array from that address
-    RamChip::write(frameNumber * FRAME_BYTECOUNT, buffer, FRAME_BYTECOUNT);
+    write(frameNumber * USER_AUDIO_IO_BUFFER_SIZE, frame->samples,
+        USER_AUDIO_IO_BUFFER_SIZE);
 }
 
 void RamChip::RWError() {

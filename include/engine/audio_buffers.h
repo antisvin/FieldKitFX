@@ -11,7 +11,7 @@
 
 #include "utils/utils.h"
 
-constexpr uint8_t AUDIO_IO_BUFFER_SIZE = 96;
+constexpr uint8_t AUDIO_IO_BUFFER_SIZE = 128;
 // divide by 4 to have the audio latency (in samples)
 constexpr uint8_t USER_AUDIO_IO_BUFFER_SIZE = AUDIO_IO_BUFFER_SIZE / 4;
 
